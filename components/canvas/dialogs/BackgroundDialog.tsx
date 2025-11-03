@@ -5,6 +5,7 @@ import { ImageSquare as ImageIcon, X } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Slider } from "@/components/ui/slider";
 import { useDropzone } from "react-dropzone";
 import { ALLOWED_IMAGE_TYPES, MAX_IMAGE_SIZE } from "@/lib/constants";
 import { useCanvasContext } from "../CanvasContext";
@@ -20,6 +21,7 @@ interface BackgroundPreferences {
   gradientColors?: string[];
   gradientType?: "linear" | "radial";
   backgroundImageUrl?: string | null; // Only saved if it's a Cloudinary public ID
+  backgroundBlur?: number; // Blur radius for background images (0-100)
 }
 interface BackgroundDialogProps {
   open: boolean;
@@ -33,6 +35,7 @@ export function BackgroundDialog({ open, onOpenChange }: BackgroundDialogProps) 
   const [gradientColors, setGradientColors] = useState(["#ffffff", "#3b82f6"]);
   const [gradientType, setGradientType] = useState<"linear" | "radial">("linear");
   const [backgroundImageUrl, setBackgroundImageUrl] = useState<string | null>(null);
+  const [backgroundBlur, setBackgroundBlur] = useState(0);
   const [bgUploadError, setBgUploadError] = useState<string | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
 
@@ -50,6 +53,7 @@ export function BackgroundDialog({ open, onOpenChange }: BackgroundDialogProps) 
       backgroundImageUrl: backgroundImageUrl && !backgroundImageUrl.startsWith("blob:") 
         ? backgroundImageUrl 
         : null,
+      backgroundBlur,
     };
     localStorage.setItem(BACKGROUND_PREFS_KEY, JSON.stringify(prefs));
   };
@@ -76,6 +80,7 @@ export function BackgroundDialog({ open, onOpenChange }: BackgroundDialogProps) 
       if (prefs.gradientColors) setGradientColors(prefs.gradientColors);
       if (prefs.gradientType) setGradientType(prefs.gradientType);
       if (prefs.backgroundImageUrl) setBackgroundImageUrl(prefs.backgroundImageUrl);
+      if (prefs.backgroundBlur !== undefined) setBackgroundBlur(prefs.backgroundBlur);
     }
     setIsInitialized(true);
   }, []);
@@ -139,7 +144,7 @@ export function BackgroundDialog({ open, onOpenChange }: BackgroundDialogProps) 
     } else if (prefs.type === "image" && prefs.backgroundImageUrl) {
       // Only restore if it's a Cloudinary public ID
       if (!prefs.backgroundImageUrl.startsWith("blob:")) {
-        updateCanvasBackgroundImage(prefs.backgroundImageUrl);
+        updateCanvasBackgroundImage(prefs.backgroundImageUrl, prefs.backgroundBlur || 0);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -150,7 +155,7 @@ export function BackgroundDialog({ open, onOpenChange }: BackgroundDialogProps) 
     if (!isInitialized) return;
     savePreferences();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [backgroundColor, backgroundType, gradientColors, gradientType, backgroundImageUrl, isInitialized]);
+  }, [backgroundColor, backgroundType, gradientColors, gradientType, backgroundImageUrl, backgroundBlur, isInitialized]);
 
   const validateFile = (file: File): string | null => {
     if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
@@ -232,19 +237,28 @@ export function BackgroundDialog({ open, onOpenChange }: BackgroundDialogProps) 
     }
   };
 
-  const updateCanvasBackgroundImage = async (imageUrl: string) => {
+  const updateCanvasBackgroundImage = async (imageUrl: string, blur: number = backgroundBlur) => {
     if (layer && stage) {
       try {
-        // imageUrl is always a Cloudinary public ID
-        const optimizedUrl = getCldImageUrl({
-          src: imageUrl,
-          width: stage.width(),
-          height: stage.height(),
-          quality: 'auto',
-          format: 'auto',
-          crop: 'fill',
-          gravity: 'auto',
-        });
+        // Remove existing background image node if it exists
+        const existingBgImage = layer.findOne((node: any) => node.id() === "canvas-background-image");
+        if (existingBgImage) {
+          existingBgImage.destroy();
+        }
+
+        // imageUrl can be a Cloudinary public ID or a blob URL
+        const isCloudinary = !imageUrl.startsWith("blob:") && !imageUrl.startsWith("http");
+        const optimizedUrl = isCloudinary
+          ? getCldImageUrl({
+              src: imageUrl,
+              width: stage.width(),
+              height: stage.height(),
+              quality: 'auto',
+              format: 'auto',
+              crop: 'fill',
+              gravity: 'auto',
+            })
+          : imageUrl;
         
         const img = await new Promise<HTMLImageElement>((resolve, reject) => {
           const image = new Image();
@@ -268,18 +282,55 @@ export function BackgroundDialog({ open, onOpenChange }: BackgroundDialogProps) 
 
         const bgRect = layer.findOne((node: any) => node.id() === "canvas-background") as Konva.Rect;
         if (bgRect && bgRect instanceof Konva.Rect) {
+          // Clear previous fills
           bgRect.fill(null);
           bgRect.fillLinearGradientColorStops([]);
           bgRect.fillRadialGradientColorStops([]);
+          bgRect.fillPatternImage(null);
           
-          bgRect.fillPatternImage(img);
-          bgRect.fillPatternRepeat("no-repeat");
-          
-          const scaleX = stage.width() / img.width;
-          const scaleY = stage.height() / img.height;
-          bgRect.fillPatternScale({ x: scaleX, y: scaleY });
-          bgRect.fillPatternOffset({ x: 0, y: 0 });
-          bgRect.fillPriority('pattern');
+          if (blur > 0) {
+            // Use Konva.Image with blur filter for blurred backgrounds
+            // Scale image to cover canvas (cover mode)
+            const scaleX = stage.width() / img.width;
+            const scaleY = stage.height() / img.height;
+            const scale = Math.max(scaleX, scaleY);
+            const scaledWidth = img.width * scale;
+            const scaledHeight = img.height * scale;
+            
+            const bgImage = new Konva.Image({
+              id: "canvas-background-image",
+              x: (stage.width() - scaledWidth) / 2,
+              y: (stage.height() - scaledHeight) / 2,
+              width: scaledWidth,
+              height: scaledHeight,
+              image: img,
+              listening: false,
+            });
+            
+            // Apply blur filter
+            bgImage.filters([Konva.Filters.Blur]);
+            bgImage.blurRadius(blur);
+            bgImage.cache();
+            
+            layer.add(bgImage);
+            bgImage.moveToBottom();
+          } else {
+            // Use fillPatternImage for non-blurred backgrounds (more efficient)
+            // Ensure any existing blur image is removed
+            const existingBgImage = layer.findOne((node: any) => node.id() === "canvas-background-image");
+            if (existingBgImage) {
+              existingBgImage.destroy();
+            }
+            
+            bgRect.fillPatternImage(img);
+            bgRect.fillPatternRepeat("no-repeat");
+            
+            const scaleX = stage.width() / img.width;
+            const scaleY = stage.height() / img.height;
+            bgRect.fillPatternScale({ x: scaleX, y: scaleY });
+            bgRect.fillPatternOffset({ x: 0, y: 0 });
+            bgRect.fillPriority('pattern');
+          }
           
           layer.batchDraw();
           setBackgroundImageUrl(imageUrl);
@@ -300,7 +351,7 @@ export function BackgroundDialog({ open, onOpenChange }: BackgroundDialogProps) 
 
     setBgUploadError(null);
     const url = URL.createObjectURL(file);
-    await updateCanvasBackgroundImage(url);
+    await updateCanvasBackgroundImage(url, backgroundBlur);
     setBackgroundType("image");
     // Note: Blob URLs are not saved to localStorage as they're temporary
   };
@@ -661,7 +712,7 @@ export function BackgroundDialog({ open, onOpenChange }: BackgroundDialogProps) 
                           key={idx}
                           className="relative aspect-video rounded-lg overflow-hidden border-2 border-gray-200 hover:border-blue-500 hover:border-2 transition-all group"
                           onClick={() => {
-                            updateCanvasBackgroundImage(publicId);
+                            updateCanvasBackgroundImage(publicId, backgroundBlur);
                             setBackgroundType("image");
                           }}
                           title={`Use background ${idx + 1}`}
@@ -715,47 +766,81 @@ export function BackgroundDialog({ open, onOpenChange }: BackgroundDialogProps) 
               </div>
 
               {backgroundImageUrl && (
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Current Background</label>
-                  <div className="relative rounded-lg overflow-hidden border">
-                    <img
-                      src={
-                        backgroundImageUrl.startsWith("blob:") || backgroundImageUrl.startsWith("http")
-                          ? backgroundImageUrl
-                          : getCldImageUrl({
-                              src: backgroundImageUrl,
-                              width: 600,
-                              height: 200,
-                              quality: 'auto',
-                              format: 'auto',
-                              crop: 'fill',
-                              gravity: 'auto',
-                            })
-                      }
-                      alt="Background preview"
-                      className="w-full h-32 object-cover"
-                    />
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      className="absolute top-2 right-2"
-                      onClick={() => {
-                        const bgRect = layer?.findOne((node: any) => node.id() === "canvas-background") as Konva.Rect;
-                        if (bgRect && bgRect instanceof Konva.Rect) {
-                          bgRect.fillPatternImage(null);
-                          bgRect.fill(backgroundColor);
-                          layer?.batchDraw();
-                          setBackgroundImageUrl(null);
-                          setBackgroundType("solid");
-                          updateCanvasBackground(backgroundColor);
+                <>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Current Background</label>
+                    <div className="relative rounded-lg overflow-hidden border">
+                      <img
+                        src={
+                          backgroundImageUrl.startsWith("blob:") || backgroundImageUrl.startsWith("http")
+                            ? backgroundImageUrl
+                            : getCldImageUrl({
+                                src: backgroundImageUrl,
+                                width: 600,
+                                height: 200,
+                                quality: 'auto',
+                                format: 'auto',
+                                crop: 'fill',
+                                gravity: 'auto',
+                              })
+                        }
+                        alt="Background preview"
+                        className="w-full h-32 object-cover"
+                        style={{
+                          filter: backgroundBlur > 0 ? `blur(${backgroundBlur * 0.1}px)` : 'none'
+                        }}
+                      />
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        className="absolute top-2 right-2"
+                        onClick={() => {
+                          const bgRect = layer?.findOne((node: any) => node.id() === "canvas-background") as Konva.Rect;
+                          const bgImage = layer?.findOne((node: any) => node.id() === "canvas-background-image");
+                          if (bgRect && bgRect instanceof Konva.Rect) {
+                            bgRect.fillPatternImage(null);
+                            bgRect.fill(backgroundColor);
+                            if (bgImage) bgImage.destroy();
+                            layer?.batchDraw();
+                            setBackgroundImageUrl(null);
+                            setBackgroundBlur(0);
+                            setBackgroundType("solid");
+                            updateCanvasBackground(backgroundColor);
+                          }
+                        }}
+                      >
+                        <X size={16} weight="regular" className="mr-1" />
+                        Remove
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Blur Control */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <label className="text-sm font-semibold text-gray-700">Background Blur</label>
+                      <span className="text-sm font-medium text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
+                        {backgroundBlur}
+                      </span>
+                    </div>
+                    <Slider
+                      value={[backgroundBlur]}
+                      onValueChange={([value]) => {
+                        setBackgroundBlur(value);
+                        if (backgroundImageUrl) {
+                          updateCanvasBackgroundImage(backgroundImageUrl, value);
                         }
                       }}
-                    >
-                      <X size={16} weight="regular" className="mr-1" />
-                      Remove
-                    </Button>
+                      min={0}
+                      max={100}
+                      step={1}
+                      className="py-2"
+                    />
+                    <p className="text-xs text-gray-500">
+                      Adjust the blur intensity for the background image
+                    </p>
                   </div>
-                </div>
+                </>
               )}
             </div>
           )}
