@@ -216,6 +216,10 @@ export function CanvasEditor({
               const showDelete = isSelected || hoveredImageId === obj.id;
               const displayWidth = (obj.width || 0) * (obj.scaleX ?? 1);
               const displayHeight = (obj.height || 0) * (obj.scaleY ?? 1);
+              const elevationX = obj.elevationX ?? 0;
+              const elevationY = obj.elevationY ?? 0;
+              const skewX = elevationY;
+              const skewY = -elevationX;
               
               return (
                 <Group
@@ -224,6 +228,8 @@ export function CanvasEditor({
                   x={obj.x}
                   y={obj.y}
                   rotation={obj.rotation ?? 0}
+                  skewX={skewX}
+                  skewY={skewY}
                   draggable
                   onDragStart={(e) => {
                     setDraggingObject(obj.id);

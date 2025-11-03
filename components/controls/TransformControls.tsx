@@ -21,6 +21,8 @@ export function TransformControls({ className }: TransformControlsProps) {
     scaleX: 1,
     scaleY: 1,
     angle: 0,
+    elevationX: 0,
+    elevationY: 0,
   });
   const [hasSelectedObject, setHasSelectedObject] = useState(false);
 
@@ -33,6 +35,8 @@ export function TransformControls({ className }: TransformControlsProps) {
         scaleX: Math.round((obj.scaleX || 1) * 100) / 100,
         scaleY: Math.round((obj.scaleY || 1) * 100) / 100,
         angle: Math.round(obj.angle || 0),
+        elevationX: Math.round((obj.elevationX || 0) * 10) / 10,
+        elevationY: Math.round((obj.elevationY || 0) * 10) / 10,
       });
       setHasSelectedObject(true);
     } else {
@@ -80,7 +84,11 @@ export function TransformControls({ className }: TransformControlsProps) {
     <Card className={cn("w-full", className)}>
       <CardHeader>
         <CardTitle>Transform</CardTitle>
-        <CardDescription>Adjust position, scale, and rotation</CardDescription>
+        <CardDescription>
+          {selectedObject?.type === "image" 
+            ? "Adjust position, scale, rotation, and elevation" 
+            : "Adjust position, scale, and rotation"}
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Position */}
@@ -169,6 +177,53 @@ export function TransformControls({ className }: TransformControlsProps) {
             step={1}
           />
         </div>
+
+        {/* Elevation controls - only for images */}
+        {selectedObject?.type === "image" && (
+          <>
+            {/* Elevation X (Vertical Tilt) */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-medium">Elevation X (Tilt Up/Down)</label>
+                <Input
+                  type="number"
+                  value={transformValues.elevationX}
+                  onChange={(e) => updateTransform("elevationX", Number(e.target.value))}
+                  className="w-20 h-8"
+                  step={0.1}
+                />
+              </div>
+              <Slider
+                value={[transformValues.elevationX]}
+                onValueChange={([value]) => updateTransform("elevationX", value)}
+                min={-45}
+                max={45}
+                step={0.1}
+              />
+            </div>
+
+            {/* Elevation Y (Horizontal Perspective) */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-medium">Elevation Y (Left/Right Perspective)</label>
+                <Input
+                  type="number"
+                  value={transformValues.elevationY}
+                  onChange={(e) => updateTransform("elevationY", Number(e.target.value))}
+                  className="w-20 h-8"
+                  step={0.1}
+                />
+              </div>
+              <Slider
+                value={[transformValues.elevationY]}
+                onValueChange={([value]) => updateTransform("elevationY", value)}
+                min={-45}
+                max={45}
+                step={0.1}
+              />
+            </div>
+          </>
+        )}
 
         {/* Delete Button */}
         <Button

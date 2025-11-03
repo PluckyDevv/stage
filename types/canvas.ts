@@ -54,6 +54,8 @@ export interface CanvasImageObject {
   scaleX?: number;
   scaleY?: number;
   rotation?: number;
+  elevationX?: number; // Tilt/perspective around X axis (vertical perspective)
+  elevationY?: number; // Tilt/perspective around Y axis (horizontal perspective)
   imageUrl?: string;
   image?: HTMLImageElement;
 }

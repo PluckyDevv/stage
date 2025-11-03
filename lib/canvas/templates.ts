@@ -45,13 +45,13 @@ export const templates: Template[] = [
   // Gradient templates
   {
     id: "gradient-blue",
-    name: "Blue Gradient",
+    name: "Ocean Breeze",
     description: "Smooth blue gradient",
     background: {
       type: "gradient",
       gradient: {
         type: "linear",
-        colors: ["#667eea", "#764ba2"],
+        colors: ["#4facfe", "#00f2fe"],
         angle: 135,
       },
     },
@@ -62,13 +62,13 @@ export const templates: Template[] = [
   },
   {
     id: "gradient-purple",
-    name: "Purple Gradient",
+    name: "Royal Purple",
     description: "Vibrant purple gradient",
     background: {
       type: "gradient",
       gradient: {
         type: "linear",
-        colors: ["#f093fb", "#f5576c"],
+        colors: ["#667eea", "#764ba2"],
         angle: 45,
       },
     },
@@ -79,7 +79,7 @@ export const templates: Template[] = [
   },
   {
     id: "gradient-orange",
-    name: "Orange Gradient",
+    name: "Sunset Glow",
     description: "Warm orange gradient",
     background: {
       type: "gradient",

@@ -19,6 +19,8 @@ interface CanvasObject {
   scaleX?: number;
   scaleY?: number;
   rotation?: number;
+  elevationX?: number; // Tilt/perspective around X axis (vertical perspective)
+  elevationY?: number; // Tilt/perspective around Y axis (horizontal perspective)
   fill?: string;
   fontSize?: number;
   text?: string;
@@ -257,6 +259,8 @@ export function CanvasProvider({ children }: { children: React.ReactNode }) {
         scaleX: 1,
         scaleY: 1,
         rotation: 0,
+        elevationX: 0,
+        elevationY: 0,
         imageUrl: imageUrl.startsWith("blob:") ? imageId : imageUrl, // Store ID for blob URLs, URL for others
         image: img,
       };
@@ -334,6 +338,12 @@ export function CanvasProvider({ children }: { children: React.ReactNode }) {
             if ('angle' in properties) {
               updatedObj.rotation = properties.angle!;
               updatedObj.angle = properties.angle!;
+            }
+            if ('elevationX' in properties) {
+              updatedObj.elevationX = properties.elevationX!;
+            }
+            if ('elevationY' in properties) {
+              updatedObj.elevationY = properties.elevationY!;
             }
             // Handle text updates
             if ('text' in properties) {
