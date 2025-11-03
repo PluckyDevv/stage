@@ -45,12 +45,12 @@ export function Hero({
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 pt-2 sm:pt-4 px-4 w-full sm:w-auto">
           <Link href={ctaHref} className="w-full sm:w-auto">
-            <Button size="lg" className="rounded-lg w-full sm:w-auto">
+            <Button size="lg" className="rounded-lg w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg transition-all">
               {ctaLabel}
             </Button>
           </Link>
           <Link href={ctaHref} className="w-full sm:w-auto">
-            <Button size="lg" variant="outline" className="rounded-lg w-full sm:w-auto">
+            <Button size="lg" variant="outline" className="rounded-lg w-full sm:w-auto border-blue-600 text-blue-600 hover:bg-blue-50 hover:border-blue-700">
               View Editor
             </Button>
           </Link>

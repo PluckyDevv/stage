@@ -52,7 +52,7 @@ export function Pricing() {
             </CardContent>
             <CardFooter>
               <Link href="/home" className="w-full">
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" className="w-full border-blue-600 text-blue-600 hover:bg-blue-50 hover:border-blue-700">
                   Get Started
                 </Button>
               </Link>
@@ -93,7 +93,7 @@ export function Pricing() {
             </CardContent>
             <CardFooter>
               <Link href="/home" className="w-full">
-                <Button className="w-full">
+                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg transition-all">
                   Upgrade to Pro
                 </Button>
               </Link>
