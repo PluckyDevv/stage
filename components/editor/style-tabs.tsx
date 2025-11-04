@@ -11,7 +11,7 @@ import { gradientColors, type GradientKey } from '@/lib/constants/gradient-color
 import { solidColors, type SolidColorKey } from '@/lib/constants/solid-colors';
 import { Button } from '@/components/ui/button';
 import { getCldImageUrl } from '@/lib/cloudinary';
-import { cloudinaryPublicIds } from '@/lib/cloudinary-backgrounds';
+import { backgroundCategories, getAvailableCategories, cloudinaryPublicIds } from '@/lib/cloudinary-backgrounds';
 import { useDropzone } from 'react-dropzone';
 import { ALLOWED_IMAGE_TYPES, MAX_IMAGE_SIZE } from '@/lib/constants';
 import { ImageSquare as ImageIcon, Crop, PaintBrush, TextT, X } from '@phosphor-icons/react';
@@ -310,45 +310,63 @@ export function StyleTabs() {
                 </div>
               )}
 
-              {cloudinaryPublicIds.length > 0 && (
-                <div className="space-y-3">
+              {backgroundCategories && Object.keys(backgroundCategories).length > 0 && (
+                <div className="space-y-4">
                   <Label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Preset Backgrounds</Label>
-                  <div className="grid grid-cols-2 gap-2.5 max-h-48 overflow-y-auto pr-1">
-                    {cloudinaryPublicIds.map((publicId, idx) => {
-                      const thumbnailUrl = getCldImageUrl({
-                        src: publicId,
-                        width: 300,
-                        height: 200,
-                        quality: 'auto',
-                        format: 'auto',
-                        crop: 'fill',
-                        gravity: 'auto',
-                      });
+                  <div className="max-h-[600px] overflow-y-auto pr-1 space-y-4">
+                    {getAvailableCategories()
+                      .filter((category: string) => category !== 'demo' && category !== 'nature') // Exclude demo and nature categories
+                      .map((category: string) => {
+                        const categoryBackgrounds = backgroundCategories[category];
+                        if (!categoryBackgrounds || categoryBackgrounds.length === 0) return null;
 
-                      return (
-                        <button
-                          key={idx}
-                          onClick={() => {
-                            setBackgroundValue(publicId);
-                            setBackgroundType('image');
-                          }}
-                          className={`relative aspect-video rounded-lg overflow-hidden border-2 transition-all ${
-                            backgroundConfig.value === publicId
-                              ? 'border-primary ring-2 ring-primary/20 shadow-sm'
-                              : 'border-border hover:border-border/80'
-                          }`}
-                          title={`Use background ${idx + 1}`}
-                        >
-                          <img
-                            src={thumbnailUrl}
-                            alt={`Background ${idx + 1}`}
-                            className="w-full h-full object-cover"
-                            loading="lazy"
-                          />
-                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
-                        </button>
-                      );
-                    })}
+                        const categoryDisplayName = category.charAt(0).toUpperCase() + category.slice(1);
+
+                        return (
+                          <div key={category} className="space-y-2">
+                            <Label className="text-xs font-medium text-foreground/80 capitalize">
+                              {categoryDisplayName} Wallpapers
+                            </Label>
+                            <div className="grid grid-cols-2 gap-2.5">
+                              {categoryBackgrounds.map((publicId: string, idx: number) => {
+                                const thumbnailUrl = getCldImageUrl({
+                                  src: publicId,
+                                  width: 300,
+                                  height: 200,
+                                  quality: 'auto',
+                                  format: 'auto',
+                                  crop: 'fill',
+                                  gravity: 'auto',
+                                });
+
+                                return (
+                                  <button
+                                    key={`${category}-${idx}`}
+                                    onClick={() => {
+                                      setBackgroundValue(publicId);
+                                      setBackgroundType('image');
+                                    }}
+                                    className={`relative aspect-video rounded-lg overflow-hidden border-2 transition-all ${
+                                      backgroundConfig.value === publicId
+                                        ? 'border-primary ring-2 ring-primary/20 shadow-sm'
+                                        : 'border-border hover:border-border/80'
+                                    }`}
+                                    title={`${categoryDisplayName} ${idx + 1}`}
+                                  >
+                                    <img
+                                      src={thumbnailUrl}
+                                      alt={`${categoryDisplayName} ${idx + 1}`}
+                                      className="w-full h-full object-cover"
+                                      loading="lazy"
+                                    />
+                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        );
+                      })}
                   </div>
                 </div>
               )}
