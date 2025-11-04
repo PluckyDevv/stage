@@ -24,6 +24,17 @@ export const gradientColors = {
     'linear-gradient(19deg, rgb(33, 212, 253) 0%, rgb(183, 33, 255) 100%)',
   orange_gradient:
     'linear-gradient(45deg, rgb(251, 218, 97) 0%, rgb(255, 90, 205) 100%)',
+  // Radial gradients
+  radial_warm_gradient:
+    'radial-gradient(circle at center, rgba(255, 204, 112, 0.8) 0%, rgba(200, 80, 192, 0.6) 50%, rgba(65, 88, 208, 0.4) 100%)',
+  radial_bold_gradient:
+    'radial-gradient(circle at center, rgba(255, 100, 50, 0.9) 0%, rgba(255, 0, 101, 0.7) 50%, rgba(123, 46, 255, 0.5) 100%)',
+  radial_soft_gradient:
+    'radial-gradient(circle at center, rgba(255, 204, 112, 0.6) 0%, rgba(200, 80, 192, 0.4) 30%, rgba(255, 255, 255, 0.2) 100%)',
+  radial_purple_gradient:
+    'radial-gradient(circle at center, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.6) 100%)',
+  radial_orange_pink_gradient:
+    'radial-gradient(circle at center, rgba(251, 218, 97, 0.9) 0%, rgba(255, 90, 205, 0.7) 100%)',
 };
 
 export type GradientKey = keyof typeof gradientColors;

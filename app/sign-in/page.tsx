@@ -37,7 +37,7 @@ export default function SignInPage() {
         {/* Back button */}
         <Link
           href="/"
-          className="absolute top-8 left-8 z-50 inline-flex items-center gap-2 px-4 py-2.5 bg-white/95 backdrop-blur-md rounded-xl text-gray-700 hover:bg-white hover:shadow-lg transition-all duration-200 shadow-md"
+          className="absolute top-8 left-8 z-50 inline-flex items-center gap-2 px-4 py-2.5 bg-white/95 backdrop-blur-md rounded-xl text-gray-700 hover:bg-white hover:shadow-lg transition-all duration-200 shadow-md touch-manipulation"
         >
           <svg
             className="w-4 h-4"
@@ -73,7 +73,7 @@ export default function SignInPage() {
         {/* Back button for mobile */}
         <Link
           href="/"
-          className="lg:hidden absolute top-6 left-6 z-50 inline-flex items-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 rounded-xl text-gray-700 transition-colors"
+          className="lg:hidden absolute top-4 sm:top-6 left-4 sm:left-6 z-50 inline-flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-gray-100 hover:bg-gray-200 rounded-xl text-gray-700 transition-colors touch-manipulation"
         >
           <svg
             className="w-4 h-4"
@@ -88,12 +88,12 @@ export default function SignInPage() {
               d="M15 19l-7-7 7-7"
             />
           </svg>
-          <span className="font-medium">Back</span>
+          <span className="font-medium text-sm sm:text-base">Back</span>
         </Link>
 
         {/* Form Container */}
-        <div className="flex-1 flex items-center justify-center p-8 sm:p-12">
-          <div className="w-full max-w-md space-y-8">
+        <div className="flex-1 flex items-center justify-center p-6 sm:p-8 md:p-12 pt-20 sm:pt-24">
+          <div className="w-full max-w-md space-y-6 sm:space-y-8 px-4 sm:px-0">
             {/* Logo */}
             <Link href="/" className="inline-block">
               <div className="flex items-center gap-3">
@@ -102,18 +102,18 @@ export default function SignInPage() {
                   alt="Stage"
                   width={48}
                   height={48}
-                  className="w-12 h-12"
+                  className="w-10 h-10 sm:w-12 sm:h-12"
                 />
-                <span className="text-3xl font-bold text-gray-900">STAGE</span>
+                <span className="text-2xl sm:text-3xl font-bold text-gray-900">STAGE</span>
               </div>
             </Link>
 
             {/* Heading */}
             <div className="space-y-2">
-              <h1 className="text-4xl font-bold text-gray-900 tracking-tight">
+              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">
                 Welcome back
               </h1>
-              <p className="text-gray-600 text-base">
+              <p className="text-gray-600 text-sm sm:text-base">
                 Sign in to continue creating your designs.
               </p>
             </div>
@@ -121,7 +121,7 @@ export default function SignInPage() {
             {/* Google Sign In Button */}
             <button
               onClick={handleGoogleSignIn}
-              className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-all duration-200 border-2 border-blue-600 hover:border-blue-700 shadow-sm hover:shadow-md"
+              className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-all duration-200 border-2 border-blue-600 hover:border-blue-700 shadow-sm hover:shadow-md touch-manipulation min-h-[44px] text-base sm:text-lg"
             >
               <GoogleIcon className="w-5 h-5" />
               <span>Sign in with Google</span>

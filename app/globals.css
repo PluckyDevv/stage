@@ -118,6 +118,8 @@
   }
   body {
     @apply bg-background text-foreground;
+    /* Prevent horizontal scroll on mobile */
+    overflow-x: hidden;
   }
   /* Glass morphism utility classes */
   .glass {
@@ -134,8 +136,28 @@
   button, a, [role="button"] {
     @apply touch-manipulation;
   }
+  /* Ensure minimum touch target size on mobile for interactive elements */
+  @media (max-width: 768px) {
+    button:not([class*="size"]):not([class*="h-"]), 
+    a:not([class*="size"]):not([class*="h-"]), 
+    [role="button"]:not([class*="size"]):not([class*="h-"]) {
+      min-height: 44px;
+    }
+  }
   /* Prevent text selection on mobile interactions */
   input, textarea {
     @apply text-base;
+    /* Prevent zoom on iOS when focusing inputs */
+    font-size: 16px;
+  }
+  /* Better scrolling on mobile */
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+  /* Prevent double tap zoom on mobile */
+  @media (max-width: 768px) {
+    button, a, [role="button"] {
+      touch-action: manipulation;
+    }
   }
 }

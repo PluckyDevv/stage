@@ -14,15 +14,15 @@ export function Pricing() {
   return (
     <section className="w-full py-12 sm:py-16 px-4 sm:px-6 border-t border-border bg-white">
       <div className="container mx-auto max-w-4xl">
-        <h2 className={`text-3xl sm:text-4xl font-bold text-center mb-8 sm:mb-12 ${instrumentSerif.className}`}>
+        <h2 className={`text-3xl sm:text-4xl font-bold text-center mb-8 sm:mb-12 px-2 ${instrumentSerif.className}`}>
           Pricing
         </h2>
-        <div className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
+        <div className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto px-2 sm:px-0">
           {/* Free Plan */}
           <Card className="flex flex-col">
             <CardHeader>
-              <CardTitle className="text-xl">Free</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-xl sm:text-2xl">Free</CardTitle>
+              <CardDescription className="text-sm sm:text-base">
                 Perfect for getting started
               </CardDescription>
             </CardHeader>
@@ -31,7 +31,7 @@ export function Pricing() {
                 <p className="text-3xl font-bold">$0</p>
                 <p className="text-sm text-muted-foreground">Forever free</p>
               </div>
-              <ul className="space-y-2 text-sm">
+              <ul className="space-y-2 text-sm sm:text-base">
                 <li className="flex items-start">
                   <span className="mr-2">✓</span>
                   <span>Basic canvas editor</span>
@@ -52,7 +52,7 @@ export function Pricing() {
             </CardContent>
             <CardFooter>
               <Link href="/home" className="w-full">
-                <Button variant="outline" className="w-full border-blue-600 text-blue-600 hover:bg-blue-50 hover:border-blue-700">
+                <Button variant="outline" className="w-full border-blue-600 text-blue-600 hover:bg-blue-50 hover:border-blue-700 touch-manipulation min-h-[44px]">
                   Get Started
                 </Button>
               </Link>
@@ -62,17 +62,17 @@ export function Pricing() {
           {/* Pro Plan */}
           <Card className="flex flex-col border-primary/20">
             <CardHeader>
-              <CardTitle className="text-xl">Pro</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-xl sm:text-2xl">Pro</CardTitle>
+              <CardDescription className="text-sm sm:text-base">
                 For serious creators
               </CardDescription>
             </CardHeader>
             <CardContent className="flex-1 space-y-4">
               <div className="space-y-2">
-                <p className="text-3xl font-bold">$7</p>
+                <p className="text-3xl sm:text-4xl font-bold">$7</p>
                 <p className="text-sm text-muted-foreground">One-time payment</p>
               </div>
-              <ul className="space-y-2 text-sm">
+              <ul className="space-y-2 text-sm sm:text-base">
                 <li className="flex items-start">
                   <span className="mr-2">✓</span>
                   <span>Everything in Free</span>
@@ -93,7 +93,7 @@ export function Pricing() {
             </CardContent>
             <CardFooter>
               <Link href="/home" className="w-full">
-                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg transition-all">
+                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg transition-all touch-manipulation min-h-[44px]">
                   Upgrade to Pro
                 </Button>
               </Link>

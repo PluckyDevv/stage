@@ -70,16 +70,16 @@ export function FAQ({ title = "Frequently Asked Questions", faqs = defaultFAQs }
   return (
     <section className="w-full py-12 sm:py-16 px-4 sm:px-6 border-t border-border bg-muted/30">
       <div className="container mx-auto max-w-3xl">
-        <h2 className={`text-3xl sm:text-4xl font-bold text-center mb-8 sm:mb-12 ${instrumentSerif.className}`}>
+        <h2 className={`text-3xl sm:text-4xl font-bold text-center mb-8 sm:mb-12 px-2 ${instrumentSerif.className}`}>
           {title}
         </h2>
         <Accordion type="single" collapsible className="w-full">
           {faqs.map((faq, index) => (
             <AccordionItem key={index} value={`item-${index}`} className="border-b border-border">
-              <AccordionTrigger className="text-left text-base sm:text-sm font-semibold py-4 hover:no-underline">
+              <AccordionTrigger className="text-left text-base sm:text-lg font-semibold py-4 sm:py-6 hover:no-underline px-2 sm:px-0">
                 {faq.question}
               </AccordionTrigger>
-              <AccordionContent className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+              <AccordionContent className="text-sm sm:text-base text-muted-foreground leading-relaxed px-2 sm:px-0 pb-4 sm:pb-6">
                 {faq.answer}
               </AccordionContent>
             </AccordionItem>

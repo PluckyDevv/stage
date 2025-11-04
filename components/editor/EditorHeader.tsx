@@ -60,9 +60,9 @@ export function EditorHeader({ className }: EditorHeaderProps) {
         className
       )}
     >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center gap-4">
-          <SidebarTrigger className="transition-opacity hover:opacity-80" />
+      <div className="container mx-auto px-3 sm:px-4 lg:px-6">
+        <div className="flex h-14 sm:h-16 items-center gap-2 sm:gap-4">
+          <SidebarTrigger className="transition-opacity hover:opacity-80 touch-manipulation" />
           
           <Link href="/" className="flex items-center transition-opacity hover:opacity-80">
             <Image 
@@ -70,24 +70,24 @@ export function EditorHeader({ className }: EditorHeaderProps) {
               alt="Stage" 
               width={32} 
               height={32}
-              className="h-8 w-8"
+              className="h-7 w-7 sm:h-8 sm:w-8"
             />
           </Link>
 
           <div className="flex-1" />
 
-          <div className="flex items-center gap-2 sm:gap-4">
+          <div className="flex items-center gap-1.5 sm:gap-2 md:gap-4">
             <a
               href="https://github.com/KartikLabhshetwar/stage"
               target="_blank"
               rel="noopener noreferrer"
               className={cn(
-                "p-2 rounded-lg transition-colors",
+                "p-2 rounded-lg transition-colors touch-manipulation",
                 "hover:bg-accent text-muted-foreground hover:text-foreground"
               )}
               aria-label="GitHub repository"
             >
-              <GithubLogo className="h-5 w-5" />
+              <GithubLogo className="h-4 w-4 sm:h-5 sm:w-5" />
             </a>
             
             {session?.user ? (
@@ -95,11 +95,11 @@ export function EditorHeader({ className }: EditorHeaderProps) {
                 <DropdownMenuTrigger asChild>
                   <button 
                     className={cn(
-                      "outline-none rounded-full transition-opacity",
+                      "outline-none rounded-full transition-opacity touch-manipulation",
                       "hover:opacity-80 focus:ring-2 focus:ring-ring focus:ring-offset-2"
                     )}
                   >
-                    <Avatar className="h-9 w-9">
+                    <Avatar className="h-8 w-8 sm:h-9 sm:w-9">
                       <AvatarImage 
                         src={session.user.image || undefined} 
                         alt={session.user.name || session.user.email} 
@@ -139,12 +139,12 @@ export function EditorHeader({ className }: EditorHeaderProps) {
             ) : (
               <>
                 <Link href="/sign-in">
-                  <Button variant="ghost" className="hidden sm:inline-flex">
+                  <Button variant="ghost" className="hidden sm:inline-flex text-sm px-3 sm:px-4 py-2 touch-manipulation">
                     Sign In
                   </Button>
                 </Link>
                 <Link href="/sign-up">
-                  <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
+                  <Button className="bg-primary hover:bg-primary/90 text-primary-foreground text-sm px-3 sm:px-4 py-2 touch-manipulation min-h-[36px]">
                     Sign Up
                   </Button>
                 </Link>

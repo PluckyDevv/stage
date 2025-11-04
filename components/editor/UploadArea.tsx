@@ -94,10 +94,10 @@ export function UploadArea({ onUpload, error, className }: UploadAreaProps) {
 
   return (
     <div ref={containerRef} className={cn("w-full max-w-2xl mx-auto", className)}>
-      <div className="space-y-8">
+      <div className="space-y-6 sm:space-y-8">
         <div className="text-center space-y-3">
-          <h2 className="text-2xl font-semibold tracking-tight">Upload Image</h2>
-          <p className="text-sm text-muted-foreground">
+          <h2 className="text-xl sm:text-2xl font-semibold tracking-tight">Upload Image</h2>
+          <p className="text-xs sm:text-sm text-muted-foreground px-2">
             Drag and drop, paste, or click to upload an image
           </p>
         </div>
@@ -105,10 +105,10 @@ export function UploadArea({ onUpload, error, className }: UploadAreaProps) {
         <div
           {...getRootProps()}
           className={cn(
-            "relative border-2 border-dashed rounded-lg p-12 md:p-16",
+            "relative border-2 border-dashed rounded-lg p-8 sm:p-12 md:p-16",
             "cursor-pointer transition-all duration-200",
             "flex flex-col items-center justify-center",
-            "min-h-[280px]",
+            "min-h-[240px] sm:min-h-[280px]",
             active
               ? "border-primary bg-primary/5 scale-[1.01]"
               : "border-border hover:border-primary/50 hover:bg-accent/50",
@@ -119,21 +119,22 @@ export function UploadArea({ onUpload, error, className }: UploadAreaProps) {
           
           <div
             className={cn(
-              "mb-6 transition-colors",
+              "mb-4 sm:mb-6 transition-colors",
               active ? "text-primary" : "text-muted-foreground"
             )}
           >
-            <ImageIcon size={56} weight="duotone" />
+            <ImageIcon size={48} weight="duotone" className="sm:hidden" />
+            <ImageIcon size={56} weight="duotone" className="hidden sm:block" />
           </div>
 
           {active ? (
-            <p className="text-base font-medium text-primary">Drop the image here...</p>
+            <p className="text-sm sm:text-base font-medium text-primary">Drop the image here...</p>
           ) : (
-            <div className="space-y-2 text-center">
-              <p className="text-base font-medium">
+            <div className="space-y-2 text-center px-2">
+              <p className="text-sm sm:text-base font-medium">
                 Drag & drop an image here
               </p>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 or tap to browse • PNG, JPG, WEBP up to {MAX_IMAGE_SIZE / 1024 / 1024}MB • or paste an image
               </p>
             </div>
@@ -141,8 +142,8 @@ export function UploadArea({ onUpload, error, className }: UploadAreaProps) {
         </div>
 
         {error && (
-          <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4">
-            <p className="text-sm text-destructive">{error}</p>
+          <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-3 sm:p-4">
+            <p className="text-xs sm:text-sm text-destructive">{error}</p>
           </div>
         )}
       </div>

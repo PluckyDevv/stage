@@ -12,6 +12,7 @@ import { ExportDialog } from '@/components/canvas/dialogs/ExportDialog';
 import { StyleTabs } from './style-tabs';
 import { Button } from '@/components/ui/button';
 import { Download, Trash2, Save } from 'lucide-react';
+import { PresetSelector } from '@/components/presets/PresetSelector';
 import { getAspectRatioPreset } from '@/lib/aspect-ratio-utils';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -113,11 +114,12 @@ export function SidebarLeft({
   return (
     <>
       <Sidebar className="border-r border-sidebar-border bg-sidebar/80 backdrop-blur-xl" {...props}>
-        <SidebarHeader className="p-3 border-b border-sidebar-border space-y-1.5 min-w-0">
+        <SidebarHeader className="p-2 sm:p-3 border-b border-sidebar-border space-y-1.5 min-w-0">
+          <PresetSelector />
           <Button
             onClick={() => setSaveDialogOpen(true)}
             disabled={!uploadedImageUrl}
-            className="w-full h-9 min-w-0 justify-start gap-2 rounded-lg bg-background hover:bg-accent text-foreground border border-border hover:border-border/80 shadow-none hover:shadow-sm transition-all duration-200 font-medium text-xs px-3 overflow-hidden"
+            className="w-full h-9 sm:h-10 min-w-0 justify-start gap-2 rounded-lg bg-background hover:bg-accent text-foreground border border-border hover:border-border/80 shadow-none hover:shadow-sm transition-all duration-200 font-medium text-xs sm:text-sm px-2 sm:px-3 overflow-hidden touch-manipulation"
             variant="outline"
             size="sm"
           >
@@ -127,7 +129,7 @@ export function SidebarLeft({
           <Button
             onClick={() => setExportDialogOpen(true)}
             disabled={!uploadedImageUrl}
-            className="w-full h-9 min-w-0 justify-start gap-2 rounded-lg bg-background hover:bg-accent text-foreground border border-border hover:border-border/80 shadow-none hover:shadow-sm transition-all duration-200 font-medium text-xs px-3 overflow-hidden"
+            className="w-full h-9 sm:h-10 min-w-0 justify-start gap-2 rounded-lg bg-background hover:bg-accent text-foreground border border-border hover:border-border/80 shadow-none hover:shadow-sm transition-all duration-200 font-medium text-xs sm:text-sm px-2 sm:px-3 overflow-hidden touch-manipulation"
             variant="outline"
             size="sm"
           >
@@ -137,7 +139,7 @@ export function SidebarLeft({
           <Button
             onClick={clearImage}
             disabled={!uploadedImageUrl}
-            className="w-full h-9 min-w-0 justify-start gap-2 rounded-lg bg-background hover:bg-destructive/10 text-destructive border border-destructive/20 hover:border-destructive/40 shadow-none hover:shadow-sm transition-all duration-200 font-medium text-xs px-3 hover:text-destructive overflow-hidden"
+            className="w-full h-9 sm:h-10 min-w-0 justify-start gap-2 rounded-lg bg-background hover:bg-destructive/10 text-destructive border border-destructive/20 hover:border-destructive/40 shadow-none hover:shadow-sm transition-all duration-200 font-medium text-xs sm:text-sm px-2 sm:px-3 hover:text-destructive overflow-hidden touch-manipulation"
             variant="outline"
             size="sm"
           >
@@ -145,7 +147,7 @@ export function SidebarLeft({
             <span className="truncate min-w-0">Remove Image</span>
           </Button>
         </SidebarHeader>
-        <SidebarContent className="px-6 py-7 space-y-6 overflow-x-hidden">
+        <SidebarContent className="px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-7 space-y-4 sm:space-y-6 overflow-x-hidden overflow-y-auto">
           <StyleTabs />
         </SidebarContent>
         <SidebarRail />

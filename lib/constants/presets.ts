@@ -1,0 +1,202 @@
+import { AspectRatioKey } from './aspect-ratios';
+import { GradientKey } from './gradient-colors';
+import { SolidColorKey } from './solid-colors';
+import { BackgroundConfig } from './backgrounds';
+import { ImageBorder, ImageShadow } from '@/lib/store';
+
+export interface PresetConfig {
+  id: string;
+  name: string;
+  description: string;
+  aspectRatio: AspectRatioKey;
+  backgroundConfig: BackgroundConfig;
+  borderRadius: number;
+  backgroundBorderRadius: number;
+  imageOpacity: number;
+  imageScale: number;
+  imageBorder: ImageBorder;
+  imageShadow: ImageShadow;
+}
+
+export const presets: PresetConfig[] = [
+  {
+    id: 'landing-showcase-1',
+    name: 'Landing Showcase',
+    description: 'Mac background with radial gradient overlay',
+    aspectRatio: '16_9',
+    backgroundConfig: {
+      type: 'image',
+      value: 'backgrounds/backgrounds/mac/mac-asset-8',
+      opacity: 1,
+    },
+    borderRadius: 24,
+    backgroundBorderRadius: 24,
+    imageOpacity: 1,
+    imageScale: 90,
+    imageBorder: {
+      enabled: false,
+      width: 2,
+      color: '#ffffff',
+      style: 'default',
+      top: true,
+      right: true,
+      bottom: true,
+      left: true,
+      borderRadius: 0,
+      inset: false,
+    },
+    imageShadow: {
+      enabled: true,
+      blur: 20,
+      offsetX: 0,
+      offsetY: 8,
+      spread: 0,
+      color: 'rgba(0, 0, 0, 0.25)',
+    },
+  },
+  {
+    id: 'landing-showcase-2',
+    name: 'Bold Landing',
+    description: 'Vibrant landing with radiant wallpaper',
+    aspectRatio: '16_9',
+    backgroundConfig: {
+      type: 'image',
+      value: 'backgrounds/backgrounds/radiant/radiant4',
+      opacity: 1,
+    },
+    borderRadius: 32,
+    backgroundBorderRadius: 32,
+    imageOpacity: 1,
+    imageScale: 85,
+    imageBorder: {
+      enabled: true,
+      width: 4,
+      color: '#ffffff',
+      style: 'default',
+      top: true,
+      right: true,
+      bottom: true,
+      left: true,
+      borderRadius: 24,
+      inset: false,
+    },
+    imageShadow: {
+      enabled: true,
+      blur: 25,
+      offsetX: 0,
+      offsetY: 10,
+      spread: 5,
+      color: 'rgba(0, 0, 0, 0.3)',
+    },
+  },
+  {
+    id: 'landing-showcase-3',
+    name: 'Clean Landing',
+    description: 'Minimal Mac showcase with soft radial gradient',
+    aspectRatio: '16_9',
+    backgroundConfig: {
+      type: 'image',
+      value: 'backgrounds/backgrounds/mac/mac-asset-7',
+      opacity: 1,
+    },
+    borderRadius: 12,
+    backgroundBorderRadius: 12,
+    imageOpacity: 1,
+    imageScale: 88,
+    imageBorder: {
+      enabled: false,
+      width: 2,
+      color: '#e5e5e5',
+      style: 'default',
+      top: true,
+      right: true,
+      bottom: true,
+      left: true,
+      borderRadius: 0,
+      inset: false,
+    },
+    imageShadow: {
+      enabled: true,
+      blur: 30,
+      offsetX: 0,
+      offsetY: 12,
+      spread: 0,
+      color: 'rgba(0, 0, 0, 0.1)',
+    },
+  },
+  {
+    id: 'landing-showcase-4',
+    name: 'Elegant Landing',
+    description: 'Sophisticated landing with elegant wallpaper',
+    aspectRatio: '16_9',
+    backgroundConfig: {
+      type: 'image',
+      value: 'backgrounds/backgrounds/assets/asset-11',
+      opacity: 1,
+    },
+    borderRadius: 16,
+    backgroundBorderRadius: 16,
+    imageOpacity: 0.95,
+    imageScale: 92,
+    imageBorder: {
+      enabled: false,
+      width: 2,
+      color: '#ffffff',
+      style: 'default',
+      top: true,
+      right: true,
+      bottom: true,
+      left: true,
+      borderRadius: 0,
+      inset: false,
+    },
+    imageShadow: {
+      enabled: true,
+      blur: 40,
+      offsetX: 0,
+      offsetY: 0,
+      spread: 10,
+      color: 'rgba(255, 255, 255, 0.15)',
+    },
+  },
+  {
+    id: 'instagram-story',
+    name: 'Instagram Story',
+    description: 'Vertical format for stories with radiant wallpaper',
+    aspectRatio: '1_1',
+    backgroundConfig: {
+      type: 'image',
+      value: 'backgrounds/backgrounds/radiant/radiant9',
+      opacity: 1,
+    },
+    borderRadius: 16,
+    backgroundBorderRadius: 16,
+    imageOpacity: 1,
+    imageScale: 100,
+    imageBorder: {
+      enabled: false,
+      width: 2,
+      color: '#000000',
+      style: 'default',
+      top: true,
+      right: true,
+      bottom: true,
+      left: true,
+      borderRadius: 0,
+      inset: false,
+    },
+    imageShadow: {
+      enabled: false,
+      blur: 10,
+      offsetX: 0,
+      offsetY: 4,
+      spread: 0,
+      color: 'rgba(0, 0, 0, 0.3)',
+    },
+  },
+];
+
+export const getPresetById = (id: string): PresetConfig | undefined => {
+  return presets.find((preset) => preset.id === id);
+};
+

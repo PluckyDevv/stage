@@ -52,11 +52,11 @@ const sampleItems: MasonryItem[] = demoImagePublicIds.map((publicId, index) => (
 
 export function MasonryGrid() {
   return (
-    <section className="w-full py-24 px-4 sm:px-6 lg:px-8 bg-muted/30">
+    <section className="w-full py-12 sm:py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-muted/30">
       <div className="container mx-auto max-w-7xl">
         {/* CSS Columns masonry layout */}
         <div 
-          className="columns-1 sm:columns-2 gap-4 sm:gap-6 lg:gap-8"
+          className="columns-1 sm:columns-2 lg:columns-3 gap-3 sm:gap-4 md:gap-6 lg:gap-8"
           style={{ 
             columnFill: 'balance' as const 
           }}
@@ -64,7 +64,7 @@ export function MasonryGrid() {
           {sampleItems.map((item) => (
             <div
               key={item.id}
-              className="relative bg-card rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-border group mb-4 sm:mb-6 break-inside-avoid"
+              className="relative bg-card rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-border group mb-3 sm:mb-4 md:mb-6 break-inside-avoid"
             >
               <div className={`relative w-full ${item.aspectRatio} overflow-hidden`}>
                 <OptimizedImage
@@ -72,7 +72,7 @@ export function MasonryGrid() {
                   alt={item.alt}
                   fill
                   className="object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
-                  sizes="(max-width: 640px) 100vw, 50vw"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   quality="auto"
                   crop="fill"
                   gravity="auto"

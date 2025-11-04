@@ -65,12 +65,12 @@ export function Navigation({
             className="h-8 w-8"
           />
         </Link>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <a
             href="https://github.com/KartikLabhshetwar/stage"
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-gray-100 rounded-lg transition-colors touch-manipulation"
             aria-label="GitHub repository"
           >
             <GithubLogo className="h-5 w-5 text-gray-700 hover:text-gray-900" />
@@ -79,7 +79,7 @@ export function Navigation({
             <>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-full">
+                  <button className="outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-full touch-manipulation">
                     <Avatar className="h-9 w-9">
                       <AvatarImage 
                         src={session.user.image || undefined} 
@@ -121,10 +121,10 @@ export function Navigation({
           ) : (
             <>
               <Link href="/sign-in">
-                <Button variant="ghost" className="hover:bg-blue-50 hover:text-blue-600">Sign In</Button>
+                <Button variant="ghost" className="hover:bg-blue-50 hover:text-blue-600 text-sm px-3 sm:px-4 py-2 touch-manipulation">Sign In</Button>
               </Link>
               <Link href="/sign-up">
-                <Button className="bg-blue-600 text-white hover:bg-blue-700">Sign Up</Button>
+                <Button className="bg-blue-600 text-white hover:bg-blue-700 text-sm px-3 sm:px-4 py-2 touch-manipulation">Sign Up</Button>
               </Link>
             </>
           )}

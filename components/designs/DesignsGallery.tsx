@@ -121,12 +121,12 @@ export function DesignsGallery() {
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation ctaLabel="Editor" ctaHref="/home" />
-      <div className="flex-1 container mx-auto px-4 sm:px-6 py-8 sm:py-12">
-        <div className="mb-8">
-          <h1 className={`text-3xl sm:text-4xl font-bold text-gray-900 mb-2 ${instrumentSerif.className}`}>
+      <div className="flex-1 container mx-auto px-4 sm:px-6 py-6 sm:py-8 md:py-12">
+        <div className="mb-6 sm:mb-8">
+          <h1 className={`text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2 px-2 sm:px-0 ${instrumentSerif.className}`}>
             My Designs
           </h1>
-          <p className="text-gray-600">
+          <p className="text-sm sm:text-base text-gray-600 px-2 sm:px-0">
             Manage and load your saved designs
           </p>
         </div>
@@ -136,25 +136,25 @@ export function DesignsGallery() {
             <CircleNotch className="w-8 h-8 animate-spin text-gray-400" />
           </div>
         ) : designs.length === 0 ? (
-          <div className="flex items-center justify-center min-h-[60vh]">
-            <Card className="p-16 text-center max-w-md w-full border shadow-lg bg-white/80 backdrop-blur-sm">
+          <div className="flex items-center justify-center min-h-[60vh] px-4">
+            <Card className="p-8 sm:p-12 md:p-16 text-center max-w-md w-full border shadow-lg bg-white/80 backdrop-blur-sm">
               <div className="flex flex-col items-center">
                 <div className="relative mb-6">
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-full blur-xl opacity-60"></div>
                   <div className="relative bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full p-6">
-                    <FolderOpen className="w-12 h-12 text-blue-600" weight="duotone" />
+                    <FolderOpen className="w-10 h-10 sm:w-12 sm:h-12 text-blue-600" weight="duotone" />
                   </div>
                 </div>
-                <h3 className="text-2xl font-semibold text-gray-900 mb-3">
+                <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-3">
                   No designs yet
                 </h3>
-                <p className="text-gray-600 mb-8 text-base leading-relaxed max-w-sm mx-auto">
+                <p className="text-sm sm:text-base text-gray-600 mb-8 leading-relaxed max-w-sm mx-auto">
                   Start creating and save your designs to see them here. Your saved work will appear in this gallery for easy access.
                 </p>
                 <Button 
                   onClick={() => router.push("/home")} 
                   size="lg"
-                  className="px-8 py-6 text-base font-medium shadow-md hover:shadow-lg transition-all duration-200"
+                  className="px-6 sm:px-8 py-4 sm:py-6 text-sm sm:text-base font-medium shadow-md hover:shadow-lg transition-all duration-200 touch-manipulation min-h-[44px] w-full sm:w-auto"
                 >
                   Go to Editor
                 </Button>
@@ -162,7 +162,7 @@ export function DesignsGallery() {
             </Card>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
             {designs.map((design) => (
               <Card
                 key={design.id}
@@ -177,38 +177,38 @@ export function DesignsGallery() {
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-gray-400">
-                      <FolderOpen className="w-12 h-12" />
+                      <FolderOpen className="w-10 h-10 sm:w-12 sm:h-12" />
                     </div>
                   )}
                 </div>
-                <div className="p-4">
-                  <h3 className="font-semibold text-gray-900 mb-1 truncate">
+                <div className="p-3 sm:p-4">
+                  <h3 className="font-semibold text-sm sm:text-base text-gray-900 mb-1 truncate">
                     {design.name}
                   </h3>
                   {design.description && (
-                    <p className="text-sm text-gray-600 mb-2 line-clamp-2">
+                    <p className="text-xs sm:text-sm text-gray-600 mb-2 line-clamp-2">
                       {design.description}
                     </p>
                   )}
-                  <p className="text-xs text-gray-500 mb-4">
+                  <p className="text-xs text-gray-500 mb-3 sm:mb-4">
                     Updated {formatDate(design.updatedAt)}
                   </p>
                   <div className="flex gap-2">
                     <Button
                       size="sm"
                       variant="default"
-                      className="flex-1"
+                      className="flex-1 text-xs sm:text-sm touch-manipulation min-h-[36px]"
                       onClick={() => handleLoad(design.id)}
                       disabled={loadingDesignId === design.id || deleting}
                     >
                       {loadingDesignId === design.id ? (
                         <>
-                          <CircleNotch className="w-4 h-4 mr-1 animate-spin" />
+                          <CircleNotch className="w-3 h-3 sm:w-4 sm:h-4 mr-1 animate-spin" />
                           Loading...
                         </>
                       ) : (
                         <>
-                          <FolderOpen className="w-4 h-4 mr-1" />
+                          <FolderOpen className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                           Load
                         </>
                       )}
@@ -221,8 +221,9 @@ export function DesignsGallery() {
                         setDeleteDialogOpen(true);
                       }}
                       disabled={loadingDesignId === design.id || deleting}
+                      className="touch-manipulation min-h-[36px] px-2 sm:px-3"
                     >
-                      <Trash className="w-4 h-4" />
+                      <Trash className="w-3 h-3 sm:w-4 sm:h-4" />
                     </Button>
                   </div>
                 </div>
@@ -234,19 +235,19 @@ export function DesignsGallery() {
       <Footer />
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent>
+        <AlertDialogContent className="mx-4 max-w-md">
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Design?</AlertDialogTitle>
             <AlertDialogDescription>
               Are you sure you want to delete &quot;{designToDelete?.name}&quot;? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
+          <AlertDialogFooter className="flex-col sm:flex-row gap-2 sm:gap-0">
+            <AlertDialogCancel disabled={deleting} className="w-full sm:w-auto touch-manipulation min-h-[44px]">Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               disabled={deleting}
-              className="bg-red-600 hover:bg-red-700"
+              className="w-full sm:w-auto bg-red-600 hover:bg-red-700 touch-manipulation min-h-[44px]"
             >
               {deleting ? "Deleting..." : "Delete"}
             </AlertDialogAction>
