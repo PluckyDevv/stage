@@ -1,6 +1,4 @@
 import { AspectRatioKey } from './aspect-ratios';
-import { GradientKey } from './gradient-colors';
-import { SolidColorKey } from './solid-colors';
 import { BackgroundConfig } from './backgrounds';
 import { ImageBorder, ImageShadow } from '@/lib/store';
 
@@ -34,15 +32,16 @@ export const presets: PresetConfig[] = [
     imageOpacity: 1,
     imageScale: 90,
     imageBorder: {
-      enabled: false,
-      width: 2,
+      enabled: true,
+      width: 3,
       color: '#ffffff',
+      type: 'glassy',
       style: 'default',
       top: true,
       right: true,
       bottom: true,
       left: true,
-      borderRadius: 0,
+      borderRadius: 24,
       inset: false,
     },
     imageShadow: {
@@ -70,8 +69,9 @@ export const presets: PresetConfig[] = [
     imageScale: 85,
     imageBorder: {
       enabled: true,
-      width: 4,
+      width: 5,
       color: '#ffffff',
+      type: 'ruler',
       style: 'default',
       top: true,
       right: true,
@@ -104,15 +104,16 @@ export const presets: PresetConfig[] = [
     imageOpacity: 1,
     imageScale: 88,
     imageBorder: {
-      enabled: false,
-      width: 2,
+      enabled: true,
+      width: 10,
       color: '#e5e5e5',
+      type: 'focus',
       style: 'default',
       top: true,
       right: true,
       bottom: true,
       left: true,
-      borderRadius: 0,
+      borderRadius: 12,
       inset: false,
     },
     imageShadow: {
@@ -139,15 +140,16 @@ export const presets: PresetConfig[] = [
     imageOpacity: 0.95,
     imageScale: 92,
     imageBorder: {
-      enabled: false,
-      width: 2,
+      enabled: true,
+      width: 3,
       color: '#ffffff',
+      type: 'infinite-mirror',
       style: 'default',
       top: true,
       right: true,
       bottom: true,
       left: true,
-      borderRadius: 0,
+      borderRadius: 16,
       inset: false,
     },
     imageShadow: {
@@ -174,15 +176,16 @@ export const presets: PresetConfig[] = [
     imageOpacity: 1,
     imageScale: 100,
     imageBorder: {
-      enabled: false,
-      width: 2,
+      enabled: true,
+      width: 4,
       color: '#000000',
+      type: 'ruler',
       style: 'default',
       top: true,
       right: true,
       bottom: true,
       left: true,
-      borderRadius: 0,
+      borderRadius: 16,
       inset: false,
     },
     imageShadow: {

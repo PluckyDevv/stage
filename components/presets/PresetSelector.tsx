@@ -98,33 +98,9 @@ export function PresetSelector() {
                 <div className="flex items-start gap-3">
                   {/* Preview thumbnail */}
                   <div
-                    className="w-16 h-16 rounded-md overflow-hidden border border-border shrink-0 relative"
+                    className="w-16 h-16 rounded-md overflow-hidden border border-border shrink-0"
                     style={getBackgroundCSS(preset.backgroundConfig)}
-                  >
-                    {/* Overlay for radial gradient effect on image backgrounds */}
-                    {preset.backgroundConfig.type === 'image' && (
-                      <div
-                        className="absolute inset-0"
-                        style={{
-                          background: 'radial-gradient(circle at center, rgba(255, 204, 112, 0.3) 0%, rgba(200, 80, 192, 0.2) 50%, rgba(65, 88, 208, 0.1) 100%)',
-                        }}
-                      />
-                    )}
-                    <div className="w-full h-full flex items-center justify-center relative z-10">
-                      <div
-                        className="w-12 h-12 rounded"
-                        style={{
-                          backgroundColor: preset.backgroundConfig.type === 'image' 
-                            ? 'rgba(255, 255, 255, 0.4)' 
-                            : 'rgba(255, 255, 255, 0.3)',
-                          borderRadius: `${preset.borderRadius}px`,
-                          boxShadow: preset.imageShadow.enabled
-                            ? `${preset.imageShadow.offsetX}px ${preset.imageShadow.offsetY}px ${preset.imageShadow.blur}px ${preset.imageShadow.spread}px ${preset.imageShadow.color}`
-                            : 'none',
-                        }}
-                      />
-                    </div>
-                  </div>
+                  />
                   
                   {/* Preset info */}
                   <div className="flex-1 min-w-0">
