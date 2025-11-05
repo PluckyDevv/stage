@@ -2,19 +2,19 @@ import { LandingPage } from "@/components/landing/LandingPage";
 
 const features = [
   {
-    title: "Interactive Canvas",
+    title: "Image Upload & Customization",
     description:
-      "Drag, resize, and transform objects with intuitive controls",
+      "Upload images and customize size, opacity, borders, shadows, and border radius for complete control over your visuals.",
   },
   {
-    title: "Rich Customization",
+    title: "Text Overlays & Backgrounds",
     description:
-      "Add images, text, gradients, and custom backgrounds",
+      "Add multiple text layers with custom fonts, colors, and shadows. Choose from gradients, solid colors, or upload your own backgrounds.",
   },
   {
-    title: "Export Options",
+    title: "Professional Export",
     description:
-      "Download your designs in PNG or JPG at full resolution",
+      "Export as PNG (with transparency) or JPG with adjustable quality and scale up to 5x. Perfect for social media and high-resolution output.",
   },
 ];
 

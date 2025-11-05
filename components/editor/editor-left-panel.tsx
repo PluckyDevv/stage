@@ -33,9 +33,9 @@ export function EditorLeftPanel() {
 
   return (
     <>
-      <div className="w-80 bg-gray-100 border-r border-gray-200 flex flex-col rounded-r-2xl overflow-hidden">
+      <div className="w-full h-full bg-gray-100 flex flex-col md:rounded-r-2xl overflow-hidden md:w-80 md:border-r md:border-gray-200">
         {/* Header */}
-        <div className="p-4 border-b border-gray-200 bg-white rounded-t-r-2xl">
+        <div className="p-4 border-b border-gray-200 bg-white md:rounded-t-r-2xl">
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
               <Image 
@@ -73,7 +73,7 @@ export function EditorLeftPanel() {
         </div>
 
         {/* Footer Actions */}
-        <div className="p-4 border-t border-gray-200 bg-white rounded-b-r-2xl space-y-2">
+        <div className="p-4 border-t border-gray-200 bg-white md:rounded-b-r-2xl space-y-2">
           <Button
             onClick={() => setExportDialogOpen(true)}
             disabled={!uploadedImageUrl}

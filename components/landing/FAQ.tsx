@@ -26,43 +26,43 @@ interface FAQProps {
 const defaultFAQs: FAQItem[] = [
   {
     question: "What is Stage?",
-    answer: "Stage is a modern web-based canvas editor for creating stunning visual designs. Upload images, add text overlays, customize backgrounds, and export high-quality graphics—all in your browser.",
+    answer: "Stage is a modern web-based canvas editor that runs entirely in your browser. Create professional-looking designs for social media, presentations, or personal projects without any design software installation required.",
   },
   {
-    question: "Do I need an account?",
-    answer: "No! Stage is completely free and requires no account. Simply start creating your designs right away.",
+    question: "Do I need to create an account?",
+    answer: "No account required! Stage is completely free to use. Simply visit the editor and start creating your designs immediately—no sign-up, no login, no hassle.",
   },
   {
-    question: "Is it free?",
-    answer: "Yes! Stage is completely free. Create unlimited designs and export without any restrictions.",
+    question: "Is Stage free to use?",
+    answer: "Yes, Stage is completely free. Create unlimited designs, export without restrictions, and access all features at no cost. Just open your browser and start designing.",
   },
   {
     question: "What can I create with Stage?",
-    answer: "Create social media graphics, image showcases, and visual designs. Upload images, add custom text overlays, choose from gradients or solid backgrounds, apply presets for instant styling, and export in high quality.",
+    answer: "You can create social media graphics (Instagram posts, stories, reels), image showcases, presentation visuals, and custom designs. Upload your images, add text overlays, customize backgrounds, apply professional presets, and export high-quality graphics.",
   },
   {
-    question: "What formats can I export?",
-    answer: "Export as PNG (with transparency) or JPG. Adjust quality (for JPG) and scale (up to 5x) for your needs. Exported images include a Stage watermark.",
+    question: "What export formats are available?",
+    answer: "Export your designs as PNG (with transparency support) or JPG. You can adjust the quality for JPG files and scale your exports up to 5x the original size for high-resolution output. Exported images include a subtle Stage watermark in the bottom-right corner. Perfect for both digital use and printing.",
   },
   {
-    question: "What aspect ratios are available?",
-    answer: "Choose from Instagram formats (Square, Portrait, Story/Reel), social media formats (Landscape, Portrait), and standard photo formats. All presets are optimized for their respective platforms.",
+    question: "Which aspect ratios does Stage support?",
+    answer: "Stage supports Instagram formats (Square 1:1, Portrait 4:5, Story/Reel 9:16), social media formats (Landscape 16:9, Portrait 3:4), and standard photo formats. All formats are optimized for their respective platforms.",
   },
   {
-    question: "Can I use presets?",
-    answer: "Yes! Stage includes 5 ready-made presets: Social Ready, Story Style, Minimal Clean, Bold Gradient, and Dark Elegant. Apply them instantly to get professional-looking designs.",
+    question: "What are presets and how do I use them?",
+    answer: "Presets are one-click styling options that instantly transform your design. Stage includes 5 professional presets: Social Ready, Story Style, Minimal Clean, Bold Gradient, and Dark Elegant. Click any preset to apply it instantly to your canvas.",
   },
   {
-    question: "What image formats are supported?",
-    answer: "Upload PNG, JPG, JPEG, or WEBP images. Maximum file size is 10MB per image.",
+    question: "What image file formats can I upload?",
+    answer: "You can upload PNG, JPG, JPEG, or WEBP images. Each image can be up to 10MB in size. The editor handles all processing in your browser for fast, secure editing.",
   },
   {
-    question: "Can I save my designs?",
-    answer: "You can export your designs directly to your device. Export your completed designs as PNG or JPG files and save them wherever you like.",
+    question: "Can I save my designs to my computer?",
+    answer: "Yes! Export your completed designs directly to your device as PNG or JPG files. Save them anywhere you like—your desktop, cloud storage, or any folder. Your designs are yours to keep.",
   },
   {
-    question: "What customization options do I have?",
-    answer: "Control image size, opacity, borders, shadows, and border radius. Add multiple text overlays with custom fonts, colors, sizes, positions, and text shadows. Choose from gradients, solid colors, or upload your own background images.",
+    question: "What customization options are available?",
+    answer: "For images: adjust size, opacity, borders (width, color, style), shadows, and border radius. For text: add multiple text overlays with custom fonts, colors, sizes, positions, and text shadows. For backgrounds: choose from gradients, solid colors, or upload your own background images.",
   },
 ];
 
