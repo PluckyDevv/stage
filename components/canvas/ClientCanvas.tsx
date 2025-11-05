@@ -404,6 +404,7 @@ function CanvasRenderer({ image }: { image: HTMLImageElement }) {
           height: `${canvasH}px`,
           minWidth: `${canvasW}px`,
           minHeight: `${canvasH}px`,
+          overflow: 'hidden',
         }}
       >
         <div
@@ -412,6 +413,7 @@ function CanvasRenderer({ image }: { image: HTMLImageElement }) {
             inset: 0,
             pointerEvents: 'none',
             zIndex: 20,
+            overflow: 'hidden',
           }}
         >
           <TextOverlayRenderer />
@@ -424,6 +426,7 @@ function CanvasRenderer({ image }: { image: HTMLImageElement }) {
               style={{
                 display: 'block',
                 backgroundColor: 'transparent',
+                overflow: 'hidden',
               }}
             >
           {/* Background Layer - Render gradient/solid backgrounds in Konva for proper rendering */}
@@ -448,26 +451,28 @@ function CanvasRenderer({ image }: { image: HTMLImageElement }) {
             
             {/* Image background */}
             {backgroundConfig.type === 'image' && bgImage && (
-              <Rect
-                x={0}
-                y={0}
-                width={canvasW}
-                height={canvasH}
-                fillPatternImage={bgImage}
-                fillPatternRepeat="no-repeat"
-                fillPatternScaleX={canvasW / bgImage.width}
-                fillPatternScaleY={canvasH / bgImage.height}
-                fillPatternOffsetX={0}
-                fillPatternOffsetY={0}
-                cornerRadius={backgroundBorderRadius}
-                shadowColor="rgba(0, 0, 0, 0.15)"
-                shadowBlur={20}
-                shadowOffsetX={0}
-                shadowOffsetY={4}
-                shadowOpacity={1}
-                stroke="#e5e7eb"
-                strokeWidth={1}
-              />
+              <Group clipX={0} clipY={0} clipWidth={canvasW} clipHeight={canvasH}>
+                <Rect
+                  x={0}
+                  y={0}
+                  width={canvasW}
+                  height={canvasH}
+                  fillPatternImage={bgImage}
+                  fillPatternRepeat="no-repeat"
+                  fillPatternScaleX={Math.max(canvasW / bgImage.width, canvasH / bgImage.height)}
+                  fillPatternScaleY={Math.max(canvasW / bgImage.width, canvasH / bgImage.height)}
+                  fillPatternOffsetX={(bgImage.width * Math.max(canvasW / bgImage.width, canvasH / bgImage.height) - canvasW) / 2}
+                  fillPatternOffsetY={(bgImage.height * Math.max(canvasW / bgImage.width, canvasH / bgImage.height) - canvasH) / 2}
+                  cornerRadius={backgroundBorderRadius}
+                  shadowColor="rgba(0, 0, 0, 0.15)"
+                  shadowBlur={20}
+                  shadowOffsetX={0}
+                  shadowOffsetY={4}
+                  shadowOpacity={1}
+                  stroke="#e5e7eb"
+                  strokeWidth={1}
+                />
+              </Group>
             )}
           </Layer>
 
