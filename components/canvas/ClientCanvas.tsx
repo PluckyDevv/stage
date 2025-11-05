@@ -7,6 +7,7 @@ import { useImageStore } from '@/lib/store'
 import { generatePattern } from '@/lib/patterns'
 import { useResponsiveCanvasDimensions } from '@/hooks/useAspectRatioDimensions'
 import { getBackgroundCSS } from '@/lib/constants/backgrounds'
+import { TextOverlayRenderer } from '@/components/image-render/text-overlay-renderer'
 
 function CanvasRenderer({ image }: { image: HTMLImageElement }) {
   const stageRef = useRef<any>(null)
@@ -404,6 +405,7 @@ function CanvasRenderer({ image }: { image: HTMLImageElement }) {
         <div className="w-full h-full flex items-center justify-center relative z-10 p-6">
           <div
             style={{
+              position: 'relative',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -413,6 +415,16 @@ function CanvasRenderer({ image }: { image: HTMLImageElement }) {
               minHeight: `${canvasH}px`,
             }}
           >
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                pointerEvents: 'none',
+                zIndex: 20,
+              }}
+            >
+              <TextOverlayRenderer />
+            </div>
             <Stage
               width={canvasW}
               height={canvasH}
