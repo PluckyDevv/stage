@@ -190,7 +190,7 @@ export function EditorRightPanel() {
                 {backgroundConfig.type === 'solid' && (
                         <div className="space-y-3">
                   <Label className="text-xs font-medium text-muted-foreground">Color</Label>
-                  <div className="grid grid-cols-4 gap-2.5">
+                  <div className="grid grid-cols-5 gap-2.5">
                     {(Object.keys(solidColors) as SolidColorKey[]).map((key) => (
                               <button
                                 key={key}
