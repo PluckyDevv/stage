@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/select';
 import { GlassInputWrapper } from '@/components/ui/glass-input-wrapper';
 import { useImageStore } from '@/lib/store';
-import { Plus, Trash2, Eye, EyeOff, CloudUpload } from 'lucide-react';
+import {  Trash2, Eye, EyeOff } from 'lucide-react';
 import { fontFamilies, getAvailableFontWeights } from '@/lib/constants/fonts';
 
 export const TextOverlayControls = () => {
@@ -176,20 +176,6 @@ export const TextOverlayControls = () => {
           onKeyDown={(e) => e.key === 'Enter' && handleAddText()}
           className="h-11 rounded-xl border-border focus:border-primary focus:ring-2 focus:ring-ring"
         />
-        <div className="flex items-center gap-2">
-          <div className="flex-1 h-px bg-border"></div>
-          <span className="text-xs text-muted-foreground">or</span>
-          <div className="flex-1 h-px bg-border"></div>
-        </div>
-        <Button
-          onClick={handleAddText}
-          disabled={!newText.trim()}
-          variant="outline"
-          className="w-full h-10 rounded-xl border-border hover:bg-accent text-foreground gap-2"
-        >
-          <CloudUpload className="size-4" />
-          <span>Upload Image</span>
-        </Button>
       </div>
 
       {textOverlays.length > 0 && (
