@@ -1,10 +1,12 @@
 /**
  * Export service for handling image exports
- * Uses html2canvas for backgrounds and Konva for user-uploaded images
+ * Uses html2canvas for backgrounds, Konva for user-uploaded images,
+ * and modern-screenshot for 3D perspective transforms
  */
 
 import html2canvas from 'html2canvas';
 import Konva from 'konva';
+import { domToCanvas } from 'modern-screenshot';
 import {
   convertStylesToRGB,
   injectRGBOverrides,
@@ -545,122 +547,92 @@ async function exportBackground(
 }
 
 /**
- * Render 3D transformed image on canvas
- * Uses mathematical transformations to simulate CSS 3D transforms
+ * Capture 3D transformed element using modern-screenshot
+ * This properly captures CSS 3D transforms including perspective
  */
-async function render3DTransformOnCanvas(
-  imageSrc: string,
-  width: number,
-  height: number,
-  scale: number,
-  perspective3D: any,
-  borderRadius: number = 0
+async function capture3DTransformWithModernScreenshot(
+  elementId: string,
+  scale: number
 ): Promise<HTMLCanvasElement> {
-  // Create canvas
-  const canvas = document.createElement('canvas');
-  const scaledWidth = width * scale;
-  const scaledHeight = height * scale;
-  canvas.width = scaledWidth;
-  canvas.height = scaledHeight;
-  const ctx = canvas.getContext('2d');
+  // Find the 3D overlay element
+  const container = document.getElementById(elementId);
+  if (!container) {
+    throw new Error(`Element with id "${elementId}" not found`);
+  }
+
+  const overlayElement = container.querySelector('[data-3d-overlay="true"]') as HTMLElement;
+  if (!overlayElement) {
+    throw new Error('3D overlay element not found');
+  }
+
+  // Get the bounding box of the overlay element
+  const rect = overlayElement.getBoundingClientRect();
+  const overlayComputedStyle = window.getComputedStyle(overlayElement);
   
-  if (!ctx) {
-    throw new Error('Failed to get canvas context');
+  // Create a temporary container for capture
+  // Position it off-screen to avoid affecting the viewport
+  const tempContainer = document.createElement('div');
+  tempContainer.style.position = 'absolute';
+  tempContainer.style.left = '-9999px';
+  tempContainer.style.top = '-9999px';
+  tempContainer.style.width = `${rect.width}px`;
+  tempContainer.style.height = `${rect.height}px`;
+  tempContainer.style.overflow = 'visible';
+  
+  // Clone the overlay element with all its styles
+  // The overlay element itself has perspective, which applies to its children
+  const clonedOverlay = overlayElement.cloneNode(true) as HTMLElement;
+  
+  // Preserve all computed styles from the original overlay
+  clonedOverlay.style.position = 'relative';
+  clonedOverlay.style.left = '0';
+  clonedOverlay.style.top = '0';
+  clonedOverlay.style.width = overlayComputedStyle.width;
+  clonedOverlay.style.height = overlayComputedStyle.height;
+  clonedOverlay.style.perspective = overlayComputedStyle.perspective;
+  clonedOverlay.style.transformStyle = overlayComputedStyle.transformStyle;
+  
+  // Clone the image inside with all its transform styles
+  const originalImg = overlayElement.querySelector('img');
+  if (originalImg) {
+    const clonedImg = originalImg.cloneNode(true) as HTMLImageElement;
+    const imgComputedStyle = window.getComputedStyle(originalImg);
+    
+    // Preserve all image styles including the 3D transform
+    clonedImg.style.width = imgComputedStyle.width;
+    clonedImg.style.height = imgComputedStyle.height;
+    clonedImg.style.objectFit = imgComputedStyle.objectFit;
+    clonedImg.style.opacity = imgComputedStyle.opacity;
+    clonedImg.style.borderRadius = imgComputedStyle.borderRadius;
+    clonedImg.style.transform = imgComputedStyle.transform; // This contains the 3D transform
+    clonedImg.style.transformOrigin = imgComputedStyle.transformOrigin;
+    clonedImg.style.willChange = imgComputedStyle.willChange;
+    
+    // Clear the cloned overlay and add the cloned image
+    clonedOverlay.innerHTML = '';
+    clonedOverlay.appendChild(clonedImg);
   }
   
-  // Load image
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-  await new Promise<void>((resolve, reject) => {
-    img.onload = () => resolve();
-    img.onerror = reject;
-    img.src = imageSrc;
-  });
+  tempContainer.appendChild(clonedOverlay);
+  document.body.appendChild(tempContainer);
   
-  // Calculate transform values
-  const radX = (perspective3D.rotateX * Math.PI) / 180;
-  const radY = (perspective3D.rotateY * Math.PI) / 180;
-  const radZ = (perspective3D.rotateZ * Math.PI) / 180;
-  
-  // Perspective value (closer values create more dramatic effect)
-  const perspective = perspective3D.perspective || 200;
-  
-  // Center point
-  const centerX = scaledWidth / 2;
-  const centerY = scaledHeight / 2;
-  
-  // Apply translate offset
-  const translateX = (perspective3D.translateX / 100) * scaledWidth;
-  const translateY = (perspective3D.translateY / 100) * scaledHeight;
-  
-  // Calculate scale factor based on perspective and rotation
-  // This simulates perspective foreshortening
-  const perspectiveScale = perspective / (perspective + Math.abs(Math.sin(radY)) * scaledWidth * 0.5);
-  const finalScale = (perspective3D.scale || 1) * perspectiveScale;
-  
-  // Save context
-  ctx.save();
-  
-  // Move to center
-  ctx.translate(centerX + translateX, centerY + translateY);
-  
-  // Apply rotations
-  // Note: Canvas 2D doesn't support true 3D, so we simulate using 2D transforms
-  // This is an approximation that works well for most cases
-  
-  // Apply Z rotation first (around the Z-axis)
-  ctx.rotate(radZ);
-  
-  // Apply perspective-like scaling based on rotation
-  // This simulates the foreshortening effect of 3D rotation
-  const scaleX = Math.cos(radY);
-  const scaleY = Math.cos(radX);
-  
-  ctx.scale(scaleX * finalScale, scaleY * finalScale);
-  
-  // Apply shear for 3D effect (simulates rotateX and rotateY)
-  // The skew approximates the perspective distortion
-  const skewX = Math.sin(radY) * 0.5;
-  const skewY = -Math.sin(radX) * 0.5;
-  ctx.transform(1, skewY, skewX, 1, 0, 0);
-  
-  // Draw image centered
-  ctx.imageSmoothingEnabled = true;
-  ctx.imageSmoothingQuality = 'high';
-  
-  // If borderRadius is needed, use clipping path
-  if (borderRadius > 0) {
-    const cornerRadius = borderRadius * scale;
-    const x = -scaledWidth / 2;
-    const y = -scaledHeight / 2;
-    const w = scaledWidth;
-    const h = scaledHeight;
-    ctx.beginPath();
-    ctx.moveTo(x + cornerRadius, y);
-    ctx.lineTo(x + w - cornerRadius, y);
-    ctx.quadraticCurveTo(x + w, y, x + w, y + cornerRadius);
-    ctx.lineTo(x + w, y + h - cornerRadius);
-    ctx.quadraticCurveTo(x + w, y + h, x + w - cornerRadius, y + h);
-    ctx.lineTo(x + cornerRadius, y + h);
-    ctx.quadraticCurveTo(x, y + h, x, y + h - cornerRadius);
-    ctx.lineTo(x, y + cornerRadius);
-    ctx.quadraticCurveTo(x, y, x + cornerRadius, y);
-    ctx.closePath();
-    ctx.clip();
+  try {
+    // Wait for any images to load and styles to apply
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
+    // Use modern-screenshot to capture the 3D transformed element
+    // Capture the overlay element which has perspective and contains the transformed image
+    // modern-screenshot properly handles CSS 3D transforms including perspective
+    const canvas = await domToCanvas(clonedOverlay, {
+      width: rect.width * scale,
+      height: rect.height * scale,
+    });
+    
+    return canvas;
+  } finally {
+    // Clean up temporary container
+    document.body.removeChild(tempContainer);
   }
-  
-  ctx.drawImage(
-    img,
-    -scaledWidth / 2,
-    -scaledHeight / 2,
-    scaledWidth,
-    scaledHeight
-  );
-  
-  // Restore context
-  ctx.restore();
-  
-  return canvas;
 }
 
 /**
@@ -833,7 +805,7 @@ export async function exportElement(
       options.quality
     );
 
-    // Step 2.5: If 3D transforms are active, render the 3D transform on canvas
+    // Step 2.5: If 3D transforms are active, capture using modern-screenshot
     if (perspective3D && imageSrc) {
       const has3DTransform = 
         perspective3D.rotateX !== 0 ||
@@ -847,9 +819,8 @@ export async function exportElement(
         try {
           // Find the 3D transformed image overlay to get dimensions
           const overlayContainer = element.querySelector('[data-3d-overlay="true"]') as HTMLElement;
-          const overlayImage = overlayContainer?.querySelector('img[alt="3D transformed"]') as HTMLImageElement;
           
-          if (overlayImage && overlayContainer) {
+          if (overlayContainer) {
             // Get the displayed dimensions from the overlay
             const overlayRect = overlayContainer.getBoundingClientRect();
             const innerContainer = element.querySelector('div[style*="position: relative"]') as HTMLElement;
@@ -857,18 +828,10 @@ export async function exportElement(
             if (innerContainer) {
               const innerRect = innerContainer.getBoundingClientRect();
               
-              // Calculate image dimensions (use natural size or displayed size)
-              const imageWidth = overlayRect.width || overlayImage.naturalWidth || options.exportWidth;
-              const imageHeight = overlayRect.height || overlayImage.naturalHeight || options.exportHeight;
-              
-              // Render 3D transform on canvas
-              const transformedCanvas = await render3DTransformOnCanvas(
-                imageSrc,
-                imageWidth,
-                imageHeight,
-                options.scale,
-                perspective3D,
-                screenshotRadius || 0
+              // Capture 3D transform using modern-screenshot
+              const transformedCanvas = await capture3DTransformWithModernScreenshot(
+                elementId,
+                options.scale
               );
               
               // Calculate position relative to inner container
@@ -881,8 +844,8 @@ export async function exportElement(
               
               const scaledX = relativeX * scaleX;
               const scaledY = relativeY * scaleY;
-              const scaledWidth = imageWidth * scaleX;
-              const scaledHeight = imageHeight * scaleY;
+              const scaledWidth = transformedCanvas.width;
+              const scaledHeight = transformedCanvas.height;
               
               // Composite the transformed canvas onto the Konva canvas
               const compositeCtx = konvaCanvas.getContext('2d');
@@ -900,7 +863,7 @@ export async function exportElement(
             }
           }
         } catch (error) {
-          console.warn('Failed to render 3D transform, using Konva image instead:', error);
+          console.warn('Failed to capture 3D transform with modern-screenshot, using Konva image instead:', error);
           console.error('Error details:', error);
         }
       }
