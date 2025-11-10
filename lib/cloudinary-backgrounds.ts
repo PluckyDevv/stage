@@ -6,6 +6,25 @@ export interface BackgroundCategory {
 }
 
 export const backgroundCategories: BackgroundCategory = {
+  "assets": [
+    "backgrounds/backgrounds/assets/asset-26",
+    "backgrounds/backgrounds/assets/asset-2",
+    "backgrounds/backgrounds/assets/asset-11",
+    "backgrounds/backgrounds/assets/asset-12",
+    "backgrounds/backgrounds/assets/asset-13",
+    "backgrounds/backgrounds/assets/asset-14",
+    "backgrounds/backgrounds/assets/asset-15",
+    "backgrounds/backgrounds/assets/asset-16",
+    "backgrounds/backgrounds/assets/asset-17",
+    "backgrounds/backgrounds/assets/asset-18",
+    "backgrounds/backgrounds/assets/asset-19",
+    "backgrounds/backgrounds/assets/asset-20",
+    "backgrounds/backgrounds/assets/asset-21",
+    "backgrounds/backgrounds/assets/asset-22",
+    "backgrounds/backgrounds/assets/asset-23",
+    "backgrounds/backgrounds/assets/asset-24",
+    "backgrounds/backgrounds/assets/asset-25",
+  ],
   "mac": [
     "backgrounds/backgrounds/mac/mac-asset-1",
     "backgrounds/backgrounds/mac/mac-asset-10",
@@ -63,25 +82,6 @@ export const backgroundCategories: BackgroundCategory = {
     "backgrounds/backgrounds/demo/demo-7",
     "backgrounds/backgrounds/demo/demo-8",
     "backgrounds/backgrounds/demo/demo-9"
-  ],
-  "assets": [
-    "backgrounds/backgrounds/assets/asset-26",
-    "backgrounds/backgrounds/assets/asset-2",
-    "backgrounds/backgrounds/assets/asset-11",
-    "backgrounds/backgrounds/assets/asset-12",
-    "backgrounds/backgrounds/assets/asset-13",
-    "backgrounds/backgrounds/assets/asset-14",
-    "backgrounds/backgrounds/assets/asset-15",
-    "backgrounds/backgrounds/assets/asset-16",
-    "backgrounds/backgrounds/assets/asset-17",
-    "backgrounds/backgrounds/assets/asset-18",
-    "backgrounds/backgrounds/assets/asset-19",
-    "backgrounds/backgrounds/assets/asset-20",
-    "backgrounds/backgrounds/assets/asset-21",
-    "backgrounds/backgrounds/assets/asset-22",
-    "backgrounds/backgrounds/assets/asset-23",
-    "backgrounds/backgrounds/assets/asset-24",
-    "backgrounds/backgrounds/assets/asset-25",
   ],
   "silk": [
     "backgrounds/backgrounds/silk/amber",
