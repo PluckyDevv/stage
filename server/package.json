@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "build": "npx playwright install chromium",
     "start": "node index.js",
     "dev": "node --watch index.js"
   },

@@ -9,6 +9,18 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || process.env.SCREENSHOT_SERVICE_PORT || 3001;
 
+async function verifyPlaywrightInstallation() {
+  try {
+    const browser = await chromium.launch({ headless: true });
+    await browser.close();
+    console.log('✓ Playwright browser verified');
+  } catch (error) {
+    console.error('✗ Playwright browser not available:', error.message);
+    console.error('Run: npx playwright install chromium');
+    process.exit(1);
+  }
+}
+
 app.use(cors());
 app.use(express.json());
 
@@ -90,6 +102,10 @@ async function captureScreenshot(url, options = {}) {
         '--hide-scrollbars',
         '--metrics-recording-only',
         '--mute-audio',
+        '--single-process',
+        '--disable-background-timer-throttling',
+        '--disable-backgrounding-occluded-windows',
+        '--disable-renderer-backgrounding',
       ]
     });
 
@@ -230,6 +246,15 @@ app.post('/screenshot', async (req, res) => {
   } catch (error) {
     console.error('Screenshot error:', error);
 
+    if (error.message.includes('Executable doesn\'t exist') || 
+        error.message.includes('Browser not found') ||
+        error.message.includes('playwright')) {
+      return res.status(500).json({
+        error: 'Browser not available. Please ensure Playwright browsers are installed.',
+        type: 'browser_error',
+      });
+    }
+
     if (error.message.includes('timeout') || error.message.includes('Timeout')) {
       return res.status(408).json({
         error: 'Website took too long to load. Please try again or try a different URL.',
@@ -292,6 +317,12 @@ app.listen(PORT, () => {
   console.log(`Screenshot service running on http://localhost:${PORT}`);
   console.log(`Health check: http://localhost:${PORT}/health`);
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  
+  if (process.env.NODE_ENV === 'production') {
+    verifyPlaywrightInstallation().catch((error) => {
+      console.error('Failed to verify Playwright:', error);
+    });
+  }
 });
 
 export default app;

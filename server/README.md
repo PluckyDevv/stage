@@ -101,26 +101,51 @@ Health check endpoint.
 
 ## Deployment Options
 
-### Option 1: Railway
+### Option 1: Render (Recommended)
+
+1. Push your code to GitHub
+2. Go to [Render Dashboard](https://dashboard.render.com)
+3. Click "New +" → "Web Service"
+4. Connect your GitHub repository
+5. Configure the service:
+   - **Name**: `screenshot-service`
+   - **Root Directory**: `server`
+   - **Environment**: `Node`
+   - **Build Command**: `npm install && npm run build`
+   - **Start Command**: `npm start`
+   - **Plan**: Starter (minimum) or higher for better performance
+6. Add Environment Variables (optional):
+   - `NODE_ENV`: `production`
+   - `PORT`: (auto-set by Render)
+7. Click "Create Web Service"
+
+**Render-specific notes:**
+- The `render.yaml` file is included for automatic configuration
+- Playwright browsers are installed during the build step
+- Health check endpoint is automatically configured at `/health`
+- Minimum 512MB RAM recommended (Starter plan)
+- For production, consider upgrading to Standard plan for better performance
+
+### Option 2: Railway
 
 1. Push to GitHub
 2. Connect to Railway
 3. Deploy from `server` directory
 4. Railway will auto-detect and deploy
 
-### Option 2: Fly.io
+### Option 3: Fly.io
 
 1. Install flyctl
 2. Run `fly launch` in server directory
 3. Deploy with `fly deploy`
 
-### Option 3: DigitalOcean App Platform
+### Option 4: DigitalOcean App Platform
 
 1. Connect GitHub repo
 2. Select `server` directory
 3. Deploy as Node.js app
 
-### Option 4: Self-hosted (VPS)
+### Option 5: Self-hosted (VPS)
 
 ```bash
 # On your server
@@ -138,7 +163,9 @@ pm2 save
 
 ## Environment Variables
 
-- `SCREENSHOT_SERVICE_PORT` - Port number (default: 3001)
+- `PORT` - Port number (auto-set by Render, defaults to 3001 locally)
+- `SCREENSHOT_SERVICE_PORT` - Alternative port setting (fallback if PORT not set)
+- `NODE_ENV` - Environment mode (`production` or `development`)
 - `SERVICE_SECRET_KEY` - Optional API key for authentication
 
 ## Testing
@@ -163,6 +190,12 @@ curl -X POST http://localhost:3001/screenshot \
 
 ### "Failed to launch browser"
 
+**On Render:**
+- Ensure build command includes `npm run build` which installs Playwright browsers
+- Check build logs to verify Playwright installation succeeded
+- If issues persist, upgrade to a plan with more resources
+
+**Local/Self-hosted:**
 Install system dependencies:
 ```bash
 npx playwright install-deps chromium
