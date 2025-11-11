@@ -11,7 +11,7 @@ A modern web-based canvas editor for creating stunning visual designs. Upload im
 
 ### Image Editing
 - **Image Upload** - Drag & drop or file picker for image uploads
-- **Website Screenshots** - Capture screenshots of websites via URL
+- **Website Screenshots** - Capture screenshots of websites via URL using the free [Screen-Shot.xyz](https://screen-shot.xyz) API (no API key required)
 - **Image Transformations** - Scale, opacity, rotation, and border radius controls
 - **3D Perspective** (coming soon) - Apply 3D transforms with perspective effects
 - **Borders** - Multiple border styles (glassy, window, ruler, eclipse, dotted, focus, and more)
@@ -81,13 +81,13 @@ A modern web-based canvas editor for creating stunning visual designs. Upload im
    # Cache Cleanup Security (Required for production)
    CLEANUP_SECRET=your-random-secret-string
 
-   # Screenshot Service URL (Required if using standalone service)
-   # For local dev: http://localhost:3001
-   # For production: https://your-screenshot-service.onrender.com
-   SCREENSHOT_SERVICE_URL=http://localhost:3001
+   # Screenshot API URL (Optional - defaults to free Screen-Shot API)
+   # Uses https://api.screen-shot.xyz by default (free, no API key required)
+   # You can deploy your own instance or use a different service
+   SCREENSHOT_API_URL=https://api.screen-shot.xyz
    ```
 
-   > **Note**: Screenshot feature requires database and Cloudinary. All other core features including **export work fully in-browser**. Cloudinary is also used for optional image optimization of backgrounds and overlays.
+   > **Note**: Screenshot feature requires database and Cloudinary. All other core features including **export work fully in-browser**. Cloudinary is also used for optional image optimization of backgrounds and overlays. The screenshot API uses the free [Screen-Shot.xyz](https://screen-shot.xyz) service by default (no API key required).
 
 4. **Set up the database**
    ```bash
@@ -158,8 +158,7 @@ A modern web-based canvas editor for creating stunning visual designs. Upload im
 ### Image Processing & Storage
 - **[Cloudinary](https://cloudinary.com/)** - Image optimization, CDN, and screenshot storage
 - **[Sharp](https://sharp.pixelplumbing.com/)** - Server-side image processing
-- **[Puppeteer](https://pptr.dev/)** - Website screenshot capture
-- **[@sparticuz/chromium](https://github.com/Sparticuz/chromium)** - Chromium for serverless
+- **[Screen-Shot.xyz API](https://screen-shot.xyz)** - Free website screenshot capture service (no API key required)
 
 ### Database & Caching
 - **[Prisma](https://www.prisma.io/)** - Type-safe ORM
@@ -211,11 +210,11 @@ CLOUDINARY_API_KEY=your-api-key
 CLOUDINARY_API_SECRET=your-api-secret
 CLEANUP_SECRET=your-random-secret-string
 
-# Screenshot Service (Required if using standalone service)
-SCREENSHOT_SERVICE_URL=https://your-screenshot-service.onrender.com
+# Screenshot API URL (Optional - defaults to free Screen-Shot API)
+SCREENSHOT_API_URL=https://api.screen-shot.xyz
 ```
 
-**Note**: `SCREENSHOT_SERVICE_URL` should point to your deployed screenshot service on Render (or other platform). If not set, defaults to `http://localhost:3001` for local development.
+**Note**: `SCREENSHOT_API_URL` defaults to `https://api.screen-shot.xyz` which is a free, open-source screenshot API that requires no API key. You can deploy your own instance to Cloudflare Workers or use a different service by setting this variable.
 
 ### Manual Screenshot Cache Cleanup
 
@@ -259,8 +258,10 @@ The export pipeline composites these layers client-side in the correct order to 
 
 ### Optional Services
 
-- **Cloudinary** - Used only for image optimization when configured (completely optional)
-- **Screenshot API** - Used only for website screenshot capture feature (optional)
+- **Cloudinary** - Used only for screenshot caching and image optimization when configured (required for screenshot feature)
+- **Screen-Shot.xyz API** - Free screenshot capture service (no API key required, defaults to public instance)
+  - Can be self-hosted on Cloudflare Workers for better control
+  - See [Screen-Shot.xyz documentation](https://screen-shot.xyz/docs) for deployment options
 
 For comprehensive architecture documentation, see [ARCHITECTURE.md](./ARCHITECTURE.md).
 
@@ -290,9 +291,10 @@ Thanks to all our amazing contributors for their support and code!
 
 - Export may take a few seconds for high-resolution images
 - Some browsers may have limitations with large canvas operations
-- Website screenshot may timeout for slow-loading websites (8s timeout on Vercel free tier)
+- Website screenshot may timeout for slow-loading websites (55s timeout)
 - Screenshot feature requires database and Cloudinary configuration
 - Manual cache cleanup required on free Vercel account (no cron jobs)
+- Screenshot API uses free Screen-Shot.xyz service (no API key required, but rate limits may apply)
 
 ## 📄 License
 
