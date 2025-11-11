@@ -6,12 +6,16 @@ export const maxDuration = 60
 
 const SCREENSHOT_API_URL = process.env.SCREENSHOT_API_URL || 'https://api.screen-shot.xyz'
 
-async function captureViaService(url: string): Promise<{ screenshot: string; strategy: string }> {
+async function captureViaService(url: string, deviceType: 'desktop' | 'mobile' = 'desktop'): Promise<{ screenshot: string; strategy: string }> {
   try {
+    const viewport = deviceType === 'mobile' 
+      ? { width: '375', height: '667' }
+      : { width: '1920', height: '1080' }
+    
     const params = new URLSearchParams({
       url: url,
-      width: '1920',
-      height: '1080',
+      width: viewport.width,
+      height: viewport.height,
       format: 'png',
     })
     
@@ -108,11 +112,18 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { url, forceRefresh } = body
+    const { url, forceRefresh, deviceType = 'desktop' } = body
 
     if (!url || typeof url !== 'string') {
       return NextResponse.json(
         { error: 'URL is required' },
+        { status: 400 }
+      )
+    }
+
+    if (deviceType && !['desktop', 'mobile'].includes(deviceType)) {
+      return NextResponse.json(
+        { error: 'deviceType must be either "desktop" or "mobile"' },
         { status: 400 }
       )
     }
@@ -134,6 +145,7 @@ export async function POST(request: NextRequest) {
     }
 
     const normalizedUrl = normalizeUrl(validUrl.toString())
+    const cacheKey = `${normalizedUrl}:${deviceType}`
 
     if (forceRefresh) {
       try {
@@ -145,12 +157,13 @@ export async function POST(request: NextRequest) {
 
     if (!forceRefresh) {
       try {
-        const cachedScreenshot = await getCachedScreenshot(normalizedUrl)
+        const cachedScreenshot = await getCachedScreenshot(cacheKey)
         if (cachedScreenshot) {
           return NextResponse.json({
             screenshot: cachedScreenshot,
             url: normalizedUrl,
             cached: true,
+            deviceType,
           })
         }
       } catch (cacheError) {
@@ -158,10 +171,10 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const { screenshot, strategy } = await captureViaService(normalizedUrl)
+    const { screenshot, strategy } = await captureViaService(normalizedUrl, deviceType)
 
     try {
-      await cacheScreenshot(normalizedUrl, screenshot)
+      await cacheScreenshot(cacheKey, screenshot)
     } catch (cacheError) {
       console.warn('Failed to cache screenshot:', cacheError)
     }
@@ -171,6 +184,7 @@ export async function POST(request: NextRequest) {
       url: normalizedUrl,
       cached: false,
       strategy,
+      deviceType,
     })
   } catch (error) {
     console.error('Screenshot error:', error)

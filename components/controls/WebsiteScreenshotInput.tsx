@@ -4,11 +4,15 @@ import * as React from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useEditorStore, useImageStore } from '@/lib/store'
-import { Loader2, Globe } from 'lucide-react'
+import { Loader2, Globe, Monitor, Smartphone } from 'lucide-react'
+
+type DeviceType = 'desktop' | 'mobile'
 
 export function WebsiteScreenshotInput() {
   const [url, setUrl] = React.useState('')
+  const [deviceType, setDeviceType] = React.useState<DeviceType>('desktop')
   const [isLoading, setIsLoading] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
   const { setScreenshot } = useEditorStore()
@@ -73,7 +77,7 @@ export function WebsiteScreenshotInput() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ url: finalUrl }),
+        body: JSON.stringify({ url: finalUrl, deviceType }),
       })
 
       const data = await response.json()
@@ -164,7 +168,6 @@ export function WebsiteScreenshotInput() {
                 setError(null)
               }}
               onBlur={(e) => {
-                // Auto-normalize URL when user leaves the input field
                 const value = e.target.value.trim()
                 if (value) {
                   const validation = validateUrl(value)
@@ -193,8 +196,44 @@ export function WebsiteScreenshotInput() {
             )}
           </Button>
         </div>
+        <div className="flex items-center gap-3">
+          <Label htmlFor="device-type" className="text-sm font-medium whitespace-nowrap">
+            Device Type:
+          </Label>
+          <Select value={deviceType} onValueChange={(value) => setDeviceType(value as DeviceType)} disabled={isLoading}>
+            <SelectTrigger id="device-type" className="w-[140px]">
+              <SelectValue>
+                {deviceType === 'desktop' ? (
+                  <span className="flex items-center gap-2">
+                    <Monitor className="h-4 w-4" />
+                    Desktop
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-2">
+                    <Smartphone className="h-4 w-4" />
+                    Mobile
+                  </span>
+                )}
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="desktop">
+                <span className="flex items-center gap-2">
+                  <Monitor className="h-4 w-4" />
+                  Desktop
+                </span>
+              </SelectItem>
+              <SelectItem value="mobile">
+                <span className="flex items-center gap-2">
+                  <Smartphone className="h-4 w-4" />
+                  Mobile
+                </span>
+              </SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
         <p className="text-xs text-muted-foreground">
-          Enter a website URL to capture a viewport screenshot (visible browser area). https:// will be added automatically if missing.
+          Enter a website URL to capture a viewport screenshot. Choose desktop (1920x1080) or mobile (375x667) viewport size.
         </p>
       </div>
 
